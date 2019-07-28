@@ -55,6 +55,7 @@ import {
   faVuejs,
   faAccessibleIcon
 } from "@fortawesome/free-brands-svg-icons";
+import Translate from "@/components/Translate.vue";
 library.add(
   faSync,
   faMagic,
@@ -83,6 +84,7 @@ library.add(
     isAuthenticated: "auth/isAuthenticated"
   }),
   components: {
+    Translate,
     FontAwesomeIcon
   }
 })
@@ -122,7 +124,7 @@ dt {
 .rc {
   > div:first-child {
     float: left;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
     > div {
       box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
     }

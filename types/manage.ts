@@ -2,19 +2,19 @@ import { subscriptions, invoices, sources } from "stripe";
 import { IdRow, Row, Paginated } from "./root";
 
 export interface Organization extends IdRow {
-  invitationDomain?: string;
   name?: string;
   stripeCustomerId?: string;
   username: string;
+  autoJoinDomain: boolean;
+  onlyAllowDomain: boolean;
 }
 
 export interface Membership extends IdRow {
   organization: Organization;
 }
-export interface ApiKey extends Row {
-  apiKey: string;
-  secretKey: string;
-  organizationId: number;
+export interface ApiKey extends IdRow {
+  jwtApiKey: string;
+  scopes: string;
   ipRestrictions?: string;
   referrerRestrictions?: string;
 }
@@ -33,6 +33,19 @@ export interface Audit extends IdRow {
   scoreBestPractices: number;
   scoreSeo: number;
   scorePwa: number;
+}
+
+export interface Domain extends Row {
+  domain: string;
+  verificationCode: string;
+  isVerified: boolean;
+}
+export interface Webhook extends Row {
+  url: string;
+  event: string;
+  secret: string;
+  contentType: string;
+  isActive: boolean;
 }
 
 export interface Members extends Paginated {
@@ -57,6 +70,12 @@ export interface Audits extends Paginated {
   data: Audit[];
 }
 
+export interface Domains extends Paginated {
+  data: Domain[];
+}
+export interface Webhooks extends Paginated {
+  data: Webhook[];
+}
 export interface Address {
   state: string;
   country: string;
@@ -99,6 +118,13 @@ export interface AuditWebpagesKV {
 export interface AuditsKV {
   [index: string]: Audits;
 }
+export interface DomainsKV {
+  [index: string]: Domains;
+}
+export interface WebhooksKV {
+  [index: string]: Webhooks;
+}
+
 export interface SingleSubscriptionKV {
   [index: string]: {
     [index: string]: subscriptions.ISubscription;
@@ -127,6 +153,17 @@ export interface SingleAuditWebpageKV {
 export interface SingleAuditKV {
   [index: string]: {
     [index: string]: AuditsKV;
+  }
+}
+
+export interface SingleDomainKV {
+  [index: string]: {
+    [index: string]: Domain;
+  };
+}
+export interface SingleWebhookKV {
+  [index: string]: {
+    [index: string]: Webhook;
   };
 }
 
@@ -147,6 +184,10 @@ export interface RootState {
   auditWebpage: SingleAuditWebpageKV;
   audits: AuditsKV;
   audit: SingleAuditKV;
+  domains: DomainsKV;
+  domain: SingleDomainKV;
+  webhooks: WebhooksKV;
+  webhook: SingleWebhookKV;
   pricingPlans?: any;
   recentEvents?: any;
   isDownloading: boolean;
@@ -158,8 +199,9 @@ export const emptyOrganization: Organization = {
   updatedAt: new Date().toString(),
   name: "",
   username: "",
-  invitationDomain: "",
-  stripeCustomerId: ""
+  stripeCustomerId: "",
+  autoJoinDomain: false,
+  onlyAllowDomain: false
 };
 export const emptyPagination = {
   data: [],

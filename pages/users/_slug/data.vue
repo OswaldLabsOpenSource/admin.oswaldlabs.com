@@ -54,7 +54,6 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { mapGetters } from "vuex";
 import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
 import Input from "@/components/form/Input.vue";
@@ -65,20 +64,22 @@ import Input from "@/components/form/Input.vue";
     Confirm,
     Input
   },
-  computed: mapGetters({
-    isDownloading: "settings/isDownloading"
-  }),
   middleware: "auth"
 })
 export default class AccountSettings extends Vue {
   loading = "";
   deleteText = "";
-  isDownloading!: boolean;
+  isDownloading: boolean = false;
   showDelete = false;
   isDeleting = false;
 
   private exportData() {
-    this.$store.dispatch("settings/getExport");
+    this.isDownloading = true;
+    this.$store
+      .dispatch("users/getExport", { slug: this.$route.params.slug })
+      .then(() => {})
+      .catch(() => {})
+      .then(() => (this.isDownloading = false));
   }
 
   private deleteAccount() {
@@ -86,7 +87,7 @@ export default class AccountSettings extends Vue {
     this.showDelete = false;
     this.isDeleting = true;
     this.$store
-      .dispatch("settings/deleteAccount")
+      .dispatch("users/deleteAccount", { slug: this.$route.params.slug })
       .then(() => {
         this.$store.dispatch("auth/logout");
         this.$router.push("/errors/user-deleted");

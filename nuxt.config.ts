@@ -54,6 +54,7 @@ const config: NuxtConfiguration = {
     { src: "~/plugins/vuex-persist", ssr: false }
   ],
   modules: [
+    "@nuxtjs/dotenv",
     "@nuxtjs/axios",
     "@nuxtjs/pwa",
     "@nuxtjs/markdownit",
@@ -66,14 +67,14 @@ const config: NuxtConfiguration = {
     ]
   ],
   axios: {
-    host:
+    baseURL:
       process.env.NODE_ENV === "production"
         ? "platform-beta.oswaldlabs.com"
         : "localhost",
     https: process.env.NODE_ENV === "production",
     port: process.env.NODE_ENV === "production" ? 443 : 7002
   },
-  scrollBehavior: function() {
+  scrollBehavior() {
     return { x: 0, y: 0 };
   },
   build: {

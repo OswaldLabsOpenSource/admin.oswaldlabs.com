@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isVisible" class="navbar">
+  <Trap v-if="isVisible" :disabled="!showNav" class="navbar">
     <div class="container">
       <nuxt-link class="item" to="/">
         <img
@@ -9,7 +9,7 @@
         />
         <span class="item--type-logo">Oswald Labs Platform</span>
       </nuxt-link>
-      <nav v-if="isAuthenticated">
+      <nav v-if="isAuthenticated" :class="{ 'nav--visible-true': showNav }">
         <nuxt-link
           v-if="activeOrganization && activeOrganization !== 'undefined'"
           class="item"
@@ -23,7 +23,10 @@
           >Audits</nuxt-link
         >
         <nuxt-link v-else class="item" to="/dashboard">Dashboard</nuxt-link>
-        <nuxt-link class="item" :to="`/manage/${activeOrganization}/settings`"
+        <nuxt-link
+          v-if="activeOrganization && activeOrganization !== 'undefined'"
+          class="item"
+          :to="`/manage/${activeOrganization}/settings`"
           >Settings</nuxt-link
         >
         <span>
@@ -48,7 +51,7 @@
               ref="dropdown-help"
               class="dropdown"
             >
-              <nuxt-link class="item" to="/settings">Feedback</nuxt-link>
+              <button class="item" @click="feedback">Feedback</button>
               <nuxt-link class="item" to="/settings/account"
                 >Help Center</nuxt-link
               >
@@ -87,7 +90,6 @@
         <span>
           <button
             class="item item--type-user"
-            to="/settings/account"
             aria-controls="account"
             :aria-expanded="(visible === 'account').toString()"
           >
@@ -101,10 +103,14 @@
               ref="dropdown-account"
               class="dropdown"
             >
-              <nuxt-link class="item" to="/settings/account"
+              <nuxt-link
+                class="item"
+                :to="`/users/${user.username || user.id}/profile`"
                 >Settings</nuxt-link
               >
-              <nuxt-link class="item" to="/settings/organizations"
+              <nuxt-link
+                class="item"
+                :to="`/users/${user.username || user.id}/memberships`"
                 >Your teams</nuxt-link
               >
               <button class="item" @click="logout">Logout</button>
@@ -127,7 +133,23 @@
         >
       </nav>
     </div>
-  </div>
+    <button class="button button--type-nav" @click="showNav = !showNav">
+      <font-awesome-icon
+        v-if="showNav"
+        class="icon nav-icon icon--mr-1"
+        icon="times"
+        fixed-width
+      />
+      <font-awesome-icon
+        v-else
+        class="icon nav-icon icon--mr-1"
+        icon="bars"
+        fixed-width
+      />
+      <span v-if="showNav">Hide menu</span>
+      <span v-else>Menu</span>
+    </button>
+  </Trap>
 </template>
 
 <script lang="ts">
@@ -135,9 +157,24 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBell, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import Trap from "vue-focus-lock";
+// import Feeedback from "feeedback";
+import {
+  faBell,
+  faQuestionCircle,
+  faBars,
+  faTimes
+} from "@fortawesome/free-solid-svg-icons";
 import Notifications from "@/components/Notifications.vue";
-library.add(faBell, faQuestionCircle);
+library.add(faBell, faQuestionCircle, faBars, faTimes);
+// const feedback = new Feeedback({
+//   onSubmit: result =>
+//     new Promise((resolve, reject) => {
+//       if (window.agastya && typeof window.agastya.secureTrack === "function")
+//         window.agastya.secureTrack({ feedback: result });
+//       resolve();
+//     })
+// });
 
 @Component({
   computed: mapGetters({
@@ -146,19 +183,22 @@ library.add(faBell, faQuestionCircle);
   }),
   components: {
     FontAwesomeIcon,
-    Notifications
+    Notifications,
+    Trap
   }
 })
 export default class Card extends Vue {
   visible: string | null = null;
   isVisible = true;
   notificationCount = 0;
+  showNav = false;
   activeOrganization: string | null = null;
   @Watch("$route")
   private onRouteChanged() {
     this.updateNavBar();
   }
   private updateNavBar() {
+    this.showNav = false;
     if (this.$route.path.startsWith("/onboarding")) {
       this.isVisible = false;
     } else {
@@ -203,6 +243,9 @@ export default class Card extends Vue {
         });
       });
   }
+  private feedback() {
+    // feedback.open();
+  }
 }
 </script>
 
@@ -212,12 +255,59 @@ export default class Card extends Vue {
   justify-content: space-between;
   align-items: center;
 }
+
+.button--type-nav {
+  position: absolute;
+  top: 0.5rem;
+  right: 5vw;
+  z-index: 101;
+  span {
+    transform: translateY(-0.05rem);
+    display: inline-block;
+  }
+}
+
 @media (max-width: 500px) {
   .container {
+    padding-top: 1rem;
     nav {
-      overflow-x: auto;
-      white-space: nowrap;
+      display: none;
+      &.nav--visible-true {
+        display: flex !important;
+      }
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(0.25rem);
+      z-index: 100;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      .item {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+      }
+      .button {
+        width: auto;
+        margin-top: 1rem;
+        text-align: center;
+      }
     }
+  }
+}
+
+@media (min-width: 500px) {
+  nav .button {
+    margin-left: 1.5rem;
+  }
+  .button--type-nav {
+    display: none;
   }
 }
 
@@ -262,9 +352,6 @@ nav .item {
     margin: -1rem 0.5rem -1rem 0;
     border-radius: 100%;
   }
-}
-nav .button {
-  margin-left: 1.5rem;
 }
 
 .dropdown {
