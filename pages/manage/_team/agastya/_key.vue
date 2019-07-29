@@ -68,6 +68,15 @@
             @input="val => (agastyaApiKey.foregroundColor = val)"
           />
         </div>
+        <h2>Layout</h2>
+        <Blocks
+          :value="agastyaApiKey.layout"
+          :options="agastyaBlocks"
+          @input="val => (agastyaApiKey.layout = val)"
+        />
+        <div style="font-size: 80%; margin-top: 2rem">
+          {{ agastyaApiKey.layout }}
+        </div>
         <button class="button">Update Agastya API key</button>
         <button
           type="button"
@@ -121,10 +130,12 @@ import TimeAgo from "@/components/TimeAgo.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
 import CommaList from "@/components/form/CommaList.vue";
 import Input from "@/components/form/Input.vue";
+import Blocks from "@/components/form/Blocks.vue";
 import ColorInput from "@/components/form/ColorInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Select from "@/components/form/Select.vue";
 import { User } from "@/types/auth";
+import en from "@/locales/en";
 import { AgastyaApiKeys, emptyPagination, AgastyaApiKey } from "@/types/manage";
 library.add(
   faPencilAlt,
@@ -135,10 +146,12 @@ library.add(
   faEyeSlash,
   faArrowLeft
 );
+const agastyaModes = en.agastyaModes;
 
 @Component({
   components: {
     Loading,
+    Blocks,
     Input,
     CommaList,
     Confirm,
@@ -153,6 +166,7 @@ library.add(
 })
 export default class ManageSettings extends Vue {
   agastyaApiKeys: AgastyaApiKeys = emptyPagination;
+  agastyaModes = agastyaModes;
   showDelete = false;
   loading = "";
   repeatEvery = {
@@ -162,10 +176,46 @@ export default class ManageSettings extends Vue {
     3: "Monthly"
   };
   agastyaApiKey: AgastyaApiKey | null = null;
+  agastyaBlocks = [
+    {
+      type: "mode-card",
+      slug: "dyslexia"
+    },
+    {
+      type: "mode-card",
+      slug: "blue-light-filter"
+    },
+    {
+      type: "mode-card",
+      slug: "large-font"
+    },
+    {
+      type: "link-card",
+      params: [
+        {
+          name: "title",
+          label: "Link text",
+          placeholder: "Enter text for this link",
+          type: "text",
+          required: true
+        },
+        {
+          name: "url",
+          label: "Link URL",
+          placeholder: "Enter a URL for this link",
+          type: "text",
+          required: true
+        }
+      ]
+    }
+  ];
 
   private created() {
-    this.agastyaApiKeys = {
-      ...this.$store.getters["manage/agastyaApiKeys"](this.$route.params.team)
+    this.agastyaApiKey = {
+      ...this.$store.getters["manage/agastyaApiKey"](
+        this.$route.params.team,
+        this.$route.params.key
+      )
     };
   }
 

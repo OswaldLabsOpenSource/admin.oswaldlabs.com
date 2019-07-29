@@ -64,7 +64,11 @@ export interface AgastyaApiKey extends IdRow {
   links: {
     [index: string]: string;
   };
-  layout: any;
+  layout: {
+    type: string;
+    slug: string;
+    [index: string]: string | boolean | number;
+  }[];
   integrations: {
     [index: string]:
       | string

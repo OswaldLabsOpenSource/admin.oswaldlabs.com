@@ -5,6 +5,7 @@
         v-if="!disableBackgroundClose"
         class="close"
         aria-label="Close"
+        type="button"
         @click="close"
       >
         &times;

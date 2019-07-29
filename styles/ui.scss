@@ -71,11 +71,15 @@ a {
 }
 
 code {
-  font-size: 110%;
   background-color: #fff;
   padding: 0.25rem 0.5rem;
   border-radius: 0.2rem;
   box-shadow: 0 3px 6px 0 rgba($color-black, 0.035);
+}
+
+code, .input.input--font-monospace {
+  font-size: 95%;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
 .section--bg-white {

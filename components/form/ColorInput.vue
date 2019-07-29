@@ -18,6 +18,7 @@
           :max="max"
           v-bind="$attrs"
           pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+          class="input input--font-monospace"
           @input="$emit('input', $event.target.value)"
         />
       </div>
