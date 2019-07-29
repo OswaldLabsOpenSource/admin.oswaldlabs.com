@@ -3,7 +3,7 @@
     <Loading v-if="loading" :message="loading" />
     <div v-else>
       <div class="row">
-        <h1>API keys</h1>
+        <h1>Agastya</h1>
         <div class="text text--align-right">
           <button
             aria-label="Refresh"
@@ -16,65 +16,60 @@
         </div>
       </div>
       <LargeMessage
-        v-if="!loading && (!apiKeys || !apiKeys.data || !apiKeys.data.length)"
-        heading="No API keys yet"
+        v-if="
+          !loading &&
+            (!agastyaApiKeys ||
+              !agastyaApiKeys.data ||
+              !agastyaApiKeys.data.length)
+        "
+        heading="No Agastya API keys yet"
         img="undraw_software_engineer_lvl5.svg"
-        text="Create an API key below"
+        text="Create an Agastya API key below"
       />
-      <div v-else-if="apiKeys && apiKeys.data && apiKeys.data.length">
+      <div
+        v-else-if="
+          agastyaApiKeys && agastyaApiKeys.data && agastyaApiKeys.data.length
+        "
+      >
         <table class="table">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Access</th>
-              <th>Restrictions</th>
-              <th>Expiry</th>
+              <th>Agastya API key</th>
+              <th>Created</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(apiKey, index) in apiKeys.data"
-              :key="`${apiKey.id}_${index}`"
+              v-for="(agastyaApiKey, index) in agastyaApiKeys.data"
+              :key="`${agastyaApiKey.id}_${index}`"
             >
-              <td>{{ apiKey.name || "Unnamed API key" }}</td>
-              <td v-if="apiKey.scopes">
-                {{ apiKey.scopes.split(",").length }} API{{
-                  apiKey.scopes.split(",").length === 1 ? "" : "s"
-                }}
+              <td>{{ agastyaApiKey.name }}</td>
+              <td>
+                <code>{{ agastyaApiKey.slug }}</code>
               </td>
-              <td v-else>No APIs</td>
-              <td v-if="apiKey.ipRestrictions || apiKey.referrerRestrictions">
-                {{
-                  (apiKey.ipRestrictions || "").split(",").length +
-                    (apiKey.referrerRestrictions || "").split(",").length
-                }}
-                restriction{{
-                  (apiKey.ipRestrictions || "").split(",").length +
-                    (apiKey.referrerRestrictions || "").split(",").length ===
-                  1
-                    ? ""
-                    : "s"
-                }}
-              </td>
-              <td v-else>No restrictions</td>
-              <td><TimeAgo :date="apiKey.expiresAt" /></td>
+              <td><TimeAgo :date="agastyaApiKey.createdAt" /></td>
               <td class="text text--align-right">
                 <router-link
                   :to="
-                    `/manage/${$route.params.team}/developer/api-keys/${apiKey.id}`
+                    `/manage/${$route.params.team}/agastya/${agastyaApiKey.id}`
                   "
-                  aria-label="View"
+                  aria-label="Edit"
                   data-balloon-pos="up"
                   class="button button--type-icon"
                 >
-                  <font-awesome-icon class="icon" icon="eye" fixed-width />
+                  <font-awesome-icon
+                    class="icon"
+                    icon="pencil-alt"
+                    fixed-width
+                  />
                 </router-link>
                 <button
                   aria-label="Delete"
                   data-balloon-pos="up"
                   class="button button--type-icon button--color-danger"
-                  @click="() => (showDelete = apiKey)"
+                  @click="() => (showDelete = agastyaApiKey)"
                 >
                   <font-awesome-icon class="icon" icon="trash" fixed-width />
                 </button>
@@ -84,12 +79,12 @@
         </table>
         <div class="pagination text text--align-center">
           <button
-            v-if="apiKeys && apiKeys.hasMore"
+            v-if="agastyaApiKeys && agastyaApiKeys.hasMore"
             class="button"
             :disabled="loadingMore"
             @click="loadMore"
           >
-            <span>Load more API keys</span>
+            <span>Load more Agastya API key</span>
             <font-awesome-icon
               v-if="!loadingMore"
               class="icon"
@@ -104,42 +99,34 @@
           </button>
         </div>
       </div>
-      <h2>Create API key</h2>
+      <h2>Create Agastya API key</h2>
       <p>
-        You can use API keys to programmatically access Oswald Labs Platform in
-        your applications. <strong>Important note: </strong>These API keys are
-        for Oswald Labs Platform APIs, not Agastya. If you're looking for your
-        Agastya API key, you can
-        <router-link :to="`/manage/${$route.params.team}/agastya-api-keys`"
-          >go to Agastya API keys instead</router-link
-        >.
+        You can use Agastya API key to programmatically access Oswald Labs
+        Platform in your applications.
       </p>
-      <form @submit.prevent="createApiKey">
-        <CheckList
-          label="API restrictions"
-          :options="scopes"
-          :value="newScopes"
-          placeholder="Enter an IP address or CIDR, e.g., 192.168.1.1/42"
-          @input="val => (newScopes = val)"
+      <form @submit.prevent="createAgastyaApiKey">
+        <Input
+          :value="newAgastyaApiKeyName"
+          label="Name"
+          placeholder="Enter your website's name"
+          required
+          @input="val => (newAgastyaApiKeyName = val)"
         />
-        <p class="text text--color-muted text--size-small">
-          You can add IP and referrer restrictions after creating the API key.
-        </p>
-        <button class="button">Create API key</button>
+        <button class="button">Create Agastya API key</button>
       </form>
     </div>
     <transition name="modal">
       <Confirm v-if="showDelete" :on-close="() => (showDelete = null)">
-        <h2>Are you sure you want to delete this API key?</h2>
+        <h2>Are you sure you want to delete this Agastya API key?</h2>
         <p>
-          Deleting an API key is not reversible, and you'll need to update any
-          apps using this key.
+          Deleting an Agastya API key is not reversible, and Agastya will stop
+          working on your website immediately.
         </p>
         <button
           class="button button--color-danger button--state-cta"
-          @click="deleteApiKey(showDelete.id)"
+          @click="deleteAgastyaApiKey(showDelete.id)"
         >
-          Yes, delete API key
+          Yes, delete Agastya API key
         </button>
         <button type="button" class="button" @click="showDelete = null">
           No, don't delete
@@ -156,10 +143,10 @@ import { getAllCountries } from "countries-and-timezones";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faPencilAlt,
   faArrowDown,
   faSync,
-  faTrash,
-  faEye
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
@@ -170,10 +157,8 @@ import Input from "@/components/form/Input.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Select from "@/components/form/Select.vue";
 import { User } from "@/types/auth";
-import { ApiKeys, emptyPagination, ApiKey } from "@/types/manage";
-import translations from "@/locales/en";
-const scopes = translations.scopes;
-library.add(faArrowDown, faSync, faTrash, faEye);
+import { AgastyaApiKeys, emptyPagination, AgastyaApiKey } from "@/types/manage";
+library.add(faPencilAlt, faArrowDown, faSync, faTrash);
 
 @Component({
   components: {
@@ -190,25 +175,30 @@ library.add(faArrowDown, faSync, faTrash, faEye);
   middleware: "auth"
 })
 export default class ManageSettings extends Vue {
-  apiKeys: ApiKeys = emptyPagination;
-  showDelete: ApiKey | null = null;
+  agastyaApiKeys: AgastyaApiKeys = emptyPagination;
+  showDelete: AgastyaApiKey | null = null;
   loadingMore = false;
   loading = "";
-  newScopes = "orgRead";
-  scopes = scopes;
+  newAgastyaApiKeyName = "";
+  repeatEvery = {
+    0: "Hourly",
+    1: "Daily",
+    2: "Weekly",
+    3: "Monthly"
+  };
 
   private created() {
-    this.apiKeys = {
-      ...this.$store.getters["manage/apiKeys"](this.$route.params.team)
+    this.agastyaApiKeys = {
+      ...this.$store.getters["manage/agastyaApiKeys"](this.$route.params.team)
     };
   }
 
   private load() {
-    this.loading = "Loading your API keys";
+    this.loading = "Loading your Agastya API keys";
     this.$store
-      .dispatch("manage/getApiKeys", { team: this.$route.params.team })
-      .then(apiKeys => {
-        this.apiKeys = { ...apiKeys };
+      .dispatch("manage/getAgastyaApiKeys", { team: this.$route.params.team })
+      .then(agastyaApiKeys => {
+        this.agastyaApiKeys = { ...agastyaApiKeys };
       })
       .catch(error => {
         throw new Error(error);
@@ -223,13 +213,16 @@ export default class ManageSettings extends Vue {
   private loadMore() {
     this.loadingMore = true;
     this.$store
-      .dispatch("manage/getApiKeys", {
+      .dispatch("manage/getAgastyaApiKeys", {
         team: this.$route.params.team,
-        start: this.$store.state.manage.apiKeys[this.$route.params.team].next
+        start: this.$store.state.manage.agastyaApiKeys[this.$route.params.team]
+          .next
       })
       .then(() => {
-        this.apiKeys = {
-          ...this.$store.getters["manage/apiKeys"](this.$route.params.team)
+        this.agastyaApiKeys = {
+          ...this.$store.getters["manage/agastyaApiKeys"](
+            this.$route.params.team
+          )
         };
       })
       .catch(error => {
@@ -238,35 +231,35 @@ export default class ManageSettings extends Vue {
       .finally(() => (this.loadingMore = false));
   }
 
-  private createApiKey() {
-    this.loading = "Creating your API key";
+  private createAgastyaApiKey() {
+    this.loading = "Creating your Agastya API key";
     this.$store
-      .dispatch("manage/createApiKey", {
+      .dispatch("manage/createAgastyaApiKey", {
         team: this.$route.params.team,
-        scopes: this.newScopes ? this.newScopes : undefined
+        name: this.newAgastyaApiKeyName
       })
-      .then(apiKeys => {
-        this.apiKeys = { ...apiKeys };
+      .then(agastyaApiKeys => {
+        this.agastyaApiKeys = { ...agastyaApiKeys };
       })
       .catch(error => {
         throw new Error(error);
       })
       .finally(() => {
         this.loading = "";
-        this.newScopes = "";
+        this.newAgastyaApiKeyName = "";
       });
   }
 
-  private deleteApiKey(key: number) {
+  private deleteAgastyaApiKey(key: string) {
     this.showDelete = null;
-    this.loading = "Deleting your API key";
+    this.loading = "Deleting your Agastya API key";
     this.$store
-      .dispatch("manage/deleteApiKey", {
+      .dispatch("manage/deleteAgastyaApiKey", {
         team: this.$route.params.team,
         id: key
       })
-      .then(apiKeys => {
-        this.apiKeys = { ...apiKeys };
+      .then(agastyaApiKeys => {
+        this.agastyaApiKeys = { ...agastyaApiKeys };
       })
       .catch(error => {
         throw new Error(error);

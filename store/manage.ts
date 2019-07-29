@@ -24,7 +24,9 @@ export const state = (): RootState => ({
   domains: {},
   domain: {},
   webhooks: {},
-  webhook: {}
+  webhook: {},
+  agastyaApiKeys: {},
+  agastyaApiKey: {}
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -215,6 +217,26 @@ export const mutations: MutationTree<RootState> = {
     currentAudits[`${team}${id}`][auditId] = { ...audit };
     Vue.set(state, "audit", currentAudits);
   },
+  setAgastyaApiKeys(state: RootState, { team, agastyaApiKeys, start, next, id }): void {
+    const currentAgastyaApiKeys = state.agastyaApiKeys;
+    currentAgastyaApiKeys[`${team}${id}`] = currentAgastyaApiKeys[`${team}${id}`] || emptyPagination;
+    if (start) {
+      currentAgastyaApiKeys[`${team}${id}`].data = [
+        ...currentAgastyaApiKeys[`${team}${id}`].data,
+        ...agastyaApiKeys.data
+      ];
+    } else {
+      currentAgastyaApiKeys[`${team}${id}`].data = agastyaApiKeys.data;
+    }
+    currentAgastyaApiKeys[`${team}${id}`].next = next;
+    Vue.set(state, "agastyaApiKeys", currentAgastyaApiKeys);
+  },
+  setAgastyaApiKey(state: RootState, { team, agastyaApiKey, id, agastyaApiKeyId }): void {
+    const currentAgastyaApiKeys = state.agastyaApiKey;
+    currentAgastyaApiKeys[`${team}${id}`] = currentAgastyaApiKeys[`${team}${id}`] || {};
+    currentAgastyaApiKeys[`${team}${id}`][agastyaApiKeyId] = { ...agastyaApiKey };
+    Vue.set(state, "agastyaApiKey", currentAgastyaApiKeys);
+  },
   setPricingPlans(state: RootState, pricingPlans: any): void {
     Vue.set(state, "pricingPlans", pricingPlans);
   },
@@ -242,6 +264,8 @@ export const mutations: MutationTree<RootState> = {
     state.webhook = {};
     state.auditWebpages = {};
     state.auditWebpage = {};
+    state.agastyaApiKeys = {};
+    state.agastyaApiKey = {};
   }
 };
 
@@ -570,6 +594,42 @@ export const actions: ActionTree<RootState, RootState> = {
     );
     return dispatch("getWebhook", context);
   },
+  async getAgastyaApiKeys({ commit }, { team, start = 0 }) {
+    const agastyaApiKeys: any = (await this.$axios.get(
+      `/organizations/${team}/agastya-api-keys?start=${start}`
+    )).data;
+    commit("setAgastyaApiKeys", { team, agastyaApiKeys, start, next: agastyaApiKeys.next });
+    return agastyaApiKeys;
+  },
+  async getAgastyaApiKey({ commit }, { team, id }) {
+    const agastyaApiKey: any = (await this.$axios.get(
+      `/organizations/${team}/agastya-api-keys/${id}`
+    )).data;
+    commit("setAgastyaApiKey", { team, agastyaApiKey, id });
+    return agastyaApiKey;
+  },
+  async createAgastyaApiKey({ dispatch }, context) {
+    const data = { ...context };
+    delete data.team;
+    await this.$axios.put(`/organizations/${context.team}/agastya-api-keys`, data);
+    return dispatch("getAgastyaApiKeys", { team: context.team });
+  },
+  async deleteAgastyaApiKey({ dispatch }, context) {
+    await this.$axios.delete(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}`
+    );
+    return dispatch("getAgastyaApiKeys", { team: context.team });
+  },
+  async updateAgastyaApiKey({ dispatch }, context) {
+    const data = { ...context };
+    delete data.team;
+    delete data.id;
+    await this.$axios.patch(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}`,
+      data
+    );
+    return dispatch("getAgastyaApiKey", context);
+  },
   async getEvents({ commit, rootGetters }) {
     const org = rootGetters["auth/activeOrganization"];
     const organizationId = org.organizationId;
@@ -611,5 +671,8 @@ export const getters: GetterTree<RootState, RootState> = {
   webhooks: state => (team: string) => (state.webhooks)[team],
   webhook: state => (team: string, webhook: string) =>
     state.webhook[team] && state.webhook[team][webhook],
+  agastyaApiKeys: state => (team: string) => (state.agastyaApiKeys)[team],
+  agastyaApiKey: state => (team: string, agastyaApiKey: string) =>
+    state.agastyaApiKey[team] && state.agastyaApiKey[team][agastyaApiKey],
   organization: state => (team: string) => (state.organizations)[team]
 };

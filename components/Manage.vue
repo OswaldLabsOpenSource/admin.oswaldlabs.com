@@ -9,6 +9,14 @@
           <font-awesome-icon class="nav-icon" icon="cog" fixed-width />
           <span>Settings</span>
         </nuxt-link>
+        <nuxt-link class="item" :to="`/manage/${$route.params.team}/agastya`">
+          <font-awesome-icon
+            class="nav-icon"
+            icon="universal-access"
+            fixed-width
+          />
+          <span>Agastya</span>
+        </nuxt-link>
         <nuxt-link
           class="item"
           :to="`/manage/${$route.params.team}/audit-webpages`"
@@ -100,7 +108,8 @@ import {
   faUser,
   faAddressCard,
   faCode,
-  faHistory
+  faHistory,
+  faUniversalAccess
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
   faDatabase,
@@ -110,7 +119,8 @@ library.add(
   faUser,
   faCode,
   faAddressCard,
-  faHistory
+  faHistory,
+  faUniversalAccess
 );
 
 @Component({

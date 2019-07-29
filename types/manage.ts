@@ -35,17 +35,43 @@ export interface Audit extends IdRow {
   scorePwa: number;
 }
 
-export interface Domain extends Row {
+export interface Domain extends IdRow {
   domain: string;
   verificationCode: string;
   isVerified: boolean;
 }
-export interface Webhook extends Row {
+export interface Webhook extends IdRow {
   url: string;
   event: string;
   secret: string;
   contentType: string;
   isActive: boolean;
+}
+export interface AgastyaApiKey extends IdRow {
+  organizationId: number;
+  name: string;
+  slug: string;
+  backgroundColor: string;
+  foregroundColor: string;
+  domains: string;
+  customCss: {
+    title: string;
+    css: string;
+  }[];
+  variables: {
+    [index: string]: string | boolean;
+  };
+  links: {
+    [index: string]: string;
+  };
+  layout: any;
+  integrations: {
+    [index: string]:
+      | string
+      | {
+          [index: string]: string | number | boolean;
+        };
+  };
 }
 
 export interface Members extends Paginated {
@@ -69,13 +95,16 @@ export interface AuditWebpages extends Paginated {
 export interface Audits extends Paginated {
   data: Audit[];
 }
-
 export interface Domains extends Paginated {
   data: Domain[];
 }
 export interface Webhooks extends Paginated {
   data: Webhook[];
 }
+export interface AgastyaApiKeys extends Paginated {
+  data: AgastyaApiKey[];
+}
+
 export interface Address {
   state: string;
   country: string;
@@ -124,6 +153,9 @@ export interface DomainsKV {
 export interface WebhooksKV {
   [index: string]: Webhooks;
 }
+export interface AgastyaApiKeysKV {
+  [index: string]: AgastyaApiKeys;
+}
 
 export interface SingleSubscriptionKV {
   [index: string]: {
@@ -166,6 +198,11 @@ export interface SingleWebhookKV {
     [index: string]: Webhook;
   };
 }
+export interface SingleAgastyaApiKeyKV {
+  [index: string]: {
+    [index: string]: AgastyaApiKey;
+  };
+}
 
 export interface RootState {
   membership?: Membership;
@@ -188,6 +225,8 @@ export interface RootState {
   domain: SingleDomainKV;
   webhooks: WebhooksKV;
   webhook: SingleWebhookKV;
+  agastyaApiKeys: WebhooksKV;
+  agastyaApiKey: SingleAgastyaApiKeyKV;
   pricingPlans?: any;
   recentEvents?: any;
   isDownloading: boolean;
