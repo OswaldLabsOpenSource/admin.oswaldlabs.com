@@ -191,22 +191,23 @@ export default class ManageSettings extends Vue {
     },
     {
       type: "link-card",
-      params: [
-        {
-          name: "title",
-          label: "Link text",
-          placeholder: "Enter text for this link",
-          type: "text",
-          required: true
-        },
-        {
-          name: "url",
-          label: "Link URL",
-          placeholder: "Enter a URL for this link",
-          type: "text",
-          required: true
-        }
-      ]
+      name: "Link",
+      title: "More accessibility features",
+      url: "agastya-app:modes/all"
+    },
+    {
+      type: "intro-card",
+      name: "Intro call-to-action card",
+      cta: "Send message",
+      subtitle: "If you need help or have feedback, get in touch.",
+      title: "Have a question?",
+      url: "agastya-app:pages/form"
+    },
+    {
+      type: "app-card",
+      name: "Social media share icons",
+      title: "Share this page",
+      slug: "share"
     }
   ];
 
