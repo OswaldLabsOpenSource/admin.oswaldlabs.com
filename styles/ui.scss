@@ -151,6 +151,10 @@ code, .input.input--font-monospace {
 .button--size-small {
   font-size: 85%;
   padding: 0.3rem 0.5rem;
+  &.button--type-icon {
+    padding-left: 0.33rem;
+    padding-right: 0.33rem;
+  }
 }
 .button--width-full {
   display: block;

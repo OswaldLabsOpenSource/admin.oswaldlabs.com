@@ -183,6 +183,10 @@ export default class ManageSettings extends Vue {
     },
     {
       type: "mode-card",
+      slug: "night"
+    },
+    {
+      type: "mode-card",
       slug: "blue-light-filter"
     },
     {
@@ -190,18 +194,86 @@ export default class ManageSettings extends Vue {
       slug: "large-font"
     },
     {
+      type: "mode-card",
+      slug: "read-aloud"
+    },
+    {
+      type: "mode-card",
+      slug: "translate"
+    },
+    {
+      type: "mode-card",
+      slug: "reading-mode"
+    },
+    {
+      type: "mode-card",
+      slug: "contrast"
+    },
+    {
+      type: "mode-card",
+      slug: "keyboard-nav"
+    },
+    {
+      type: "mode-card",
+      slug: "desaturate"
+    },
+    {
+      type: "mode-card",
+      slug: "big-cursor"
+    },
+    {
+      type: "mode-card",
+      slug: "legible-fonts"
+    },
+    {
+      type: "mode-card",
+      slug: "highlight-links"
+    },
+    {
+      type: "mode-card",
+      slug: "line-height"
+    },
+    {
+      type: "mode-card",
+      slug: "word-spacing"
+    },
+    {
+      type: "mode-card",
+      slug: "letter-spacing"
+    },
+    {
+      type: "mode-card",
+      slug: "font-size"
+    },
+    {
+      type: "mode-card",
+      slug: "font-family"
+    },
+    {
+      type: "mode-card",
+      slug: "landmark-color"
+    },
+    {
       type: "link-card",
+      slug: "link",
       name: "Link",
       title: "More accessibility features",
       url: "agastya-app:modes/all"
     },
     {
       type: "intro-card",
+      slug: "intro",
       name: "Intro call-to-action card",
       cta: "Send message",
       subtitle: "If you need help or have feedback, get in touch.",
       title: "Have a question?",
       url: "agastya-app:pages/form"
+    },
+    {
+      type: "app-card",
+      slug: "uptime-robot",
+      name: "Uptime Robot status",
+      key: "Your API key"
     },
     {
       type: "app-card",

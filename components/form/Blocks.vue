@@ -12,6 +12,54 @@
               <div v-if="card.type === 'mode-card'" class="caption">
                 {{ agastyaModes[card.slug] || card.slug }}
               </div>
+              <div v-else-if="card.type === 'intro-card'" class="caption">
+                <div>
+                  <strong>{{ card.title }}</strong>
+                </div>
+                <div style="margin: 0.5rem 0">{{ card.subtitle }}</div>
+                <button class="fake-button" type="button">
+                  {{ card.cta }}
+                </button>
+                <div v-if="opened.includes(i)" class="edit-settings">
+                  <Input
+                    label="Card title"
+                    :value="card.title"
+                    @input="val => updateVal(i, 'title', val)"
+                  />
+                  <Input
+                    label="Card subtitle"
+                    :value="card.subtitle"
+                    @input="val => updateVal(i, 'subtitle', val)"
+                  />
+                  <Input
+                    label="Call to action text"
+                    :value="card.cta"
+                    @input="val => updateVal(i, 'cta', val)"
+                  />
+                  <Input
+                    label="Call to action link"
+                    :value="card.url"
+                    help="You can use Agastya protocol URLs like agastya-app:modes/all"
+                    @input="val => updateVal(i, 'url', val)"
+                  />
+                  <button class="button" type="button" @click="opened = []">
+                    <span>Done</span>
+                  </button>
+                </div>
+              </div>
+              <div v-else-if="card.slug === 'uptime-robot'" class="caption">
+                <span>Uptime Robot status</span>
+                <div v-if="opened.includes(i)" class="edit-settings">
+                  <Input
+                    label="API key"
+                    :value="card.key"
+                    @input="val => updateVal(i, 'key', val)"
+                  />
+                  <button class="button" type="button" @click="opened = []">
+                    <span>Done</span>
+                  </button>
+                </div>
+              </div>
               <div v-else-if="card.type === 'link-card'" class="caption">
                 <span>{{ card.title }}</span>
                 <div v-if="opened.includes(i)" class="edit-settings">
@@ -32,13 +80,16 @@
                 </div>
               </div>
               <div v-else class="caption">{{ card.name || card }}</div>
-              <div v-if="!opened.includes(i)">
+              <div v-if="!opened.includes(i)" class="actions">
                 <button
-                  v-if="card.type === 'link-card'"
+                  v-if="
+                    ['link-card', 'intro-card'].includes(card.type) ||
+                      ['uptime-robot'].includes(card.slug)
+                  "
                   aria-label="Edit"
                   data-balloon-pos="up"
                   type="button"
-                  class="button button--type-icon"
+                  class="button button--type-icon button--size-small"
                   style="margin-right: 0.5rem"
                   @click="opened.push(i)"
                 >
@@ -50,9 +101,9 @@
                 </button>
                 <button
                   aria-label="Delete"
-                  data-balloon-pos="right"
+                  data-balloon-pos="up"
                   type="button"
-                  class="button button--color-danger button--type-icon"
+                  class="button button--color-danger button--type-icon button--size-small"
                   @click="deleteItem(i)"
                 >
                   <font-awesome-icon
@@ -82,16 +133,21 @@
             :key="`o${i}`"
             class="button"
             type="button"
-            @click="arrayValue.push(option)"
+            @click="addItem(option)"
           >
-            {{
+            <img
+              class="small-app-icon"
+              alt=""
+              :src="`/app-store/${option.slug}.png`"
+            />
+            <span>{{
               agastyaModes[option.slug] ||
                 option.name ||
                 option.slug ||
                 option.title ||
                 option.type ||
                 option
-            }}
+            }}</span>
           </button>
         </div>
       </Modal>
@@ -161,6 +217,11 @@ export default class Blocks extends Vue {
     this.arrayValue = [...this.arrayValue].filter((val: any, i) => i !== index);
   }
 
+  private addItem(option: any) {
+    this.arrayValue.push(option);
+    this.showAdd = false;
+  }
+
   private updateVal(index: number, key: string, value: string) {
     const array = [...this.arrayValue];
     array[index][key] = value;
@@ -180,10 +241,17 @@ export default class Blocks extends Vue {
   padding: 0.5rem;
   width: 50%;
   text-align: center;
+  position: relative;
+  cursor: move;
   &.item--type-intro-card,
   &.item--type-link-card,
   &.item--type-app-card {
     width: 100%;
+  }
+  .actions {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
   }
 }
 .blocks-container {
@@ -197,9 +265,31 @@ export default class Blocks extends Vue {
   text-align: left;
 }
 .blocks-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   button {
-    margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+    width: 47%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
   }
+}
+.fake-button {
+  font: inherit;
+  padding: 0.25rem 1rem;
+  border-radius: 2rem;
+  border: 1px solid;
+  background: transparent;
+}
+.small-app-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  vertical-align: middle;
+  margin: -0.5rem 0.5rem -0.5rem -0.5rem;
 }
 </style>
