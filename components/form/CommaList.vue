@@ -1,6 +1,12 @@
 <template>
   <div class="form-group">
     <label :for="labelId">{{ label }}</label>
+    <div
+      v-if="help"
+      class="text text--size-small text--color-light text--lh-1 text text--mt-m05 text--mb-05"
+    >
+      {{ help }}
+    </div>
     <table class="table">
       <tbody>
         <tr v-for="(item, index) in list" :key="`p_${index}`">
@@ -37,12 +43,6 @@
       <font-awesome-icon class="icon icon--mr-1" icon="plus" fixed-width />
       <span>Add another</span>
     </button>
-    <div
-      v-if="help"
-      class="text text--size-small text--color-light text--lh-1 text text--mt-05"
-    >
-      {{ help }}
-    </div>
   </div>
 </template>
 

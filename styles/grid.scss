@@ -50,6 +50,12 @@
   .column--type-grow {
     flex-grow: 1;
   }
+  .column--type-shrink {
+    flex: none;
+  }
+  .column--type-stretch {
+    justify-content: stretch;
+  }
 }
 
 @media (max-width: 900px) {

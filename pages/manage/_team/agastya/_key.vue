@@ -5,14 +5,14 @@
       <div class="row">
         <div>
           <nuxt-link
-            :to="`/manage/${$route.params.team}/audit-webpages`"
+            :to="`/manage/${$route.params.team}/agastya`"
             aria-label="Back"
             data-balloon-pos="down"
             class="button button--type-icon button--type-back"
           >
             <font-awesome-icon class="icon" icon="arrow-left" fixed-width />
           </nuxt-link>
-          <h1>Audit</h1>
+          <h1>Agastya API key</h1>
         </div>
         <div class="text text--align-right">
           <button
@@ -26,48 +26,71 @@
         </div>
       </div>
       <form
-        v-if="auditWebpage"
-        v-meta-ctrl-enter="updateAuditWebpage"
-        @submit.prevent="updateAuditWebpage"
+        v-if="agastyaApiKey"
+        v-meta-ctrl-enter="updateAgastyaApiKey"
+        @submit.prevent="updateAgastyaApiKey"
       >
+        <h2>Settings</h2>
         <Input
-          type="url"
-          :value="auditWebpage.url"
-          label="URL"
-          placeholder="Enter new audit webpage's URL"
+          :value="agastyaApiKey.name"
+          label="Name"
+          placeholder="Enter a name for this Agastya API key"
           required
-          @input="val => (auditWebpage.url = val)"
+          @input="val => (agastyaApiKey.name = val)"
         />
-        <Select
-          :value="auditWebpage.repeatEvery"
-          label="Repeat"
-          placeholder="Select how often to audit"
-          :options="repeatEvery"
-          @input="val => (auditWebpage.repeatEvery = val)"
+        <Input
+          :value="agastyaApiKey.slug"
+          label="API key"
+          placeholder="Enter a unique, vanity API key"
+          help="Changing your API key can have unintended side effects"
+          required
+          @input="val => (agastyaApiKey.slug = val)"
         />
-        <button class="button">Update audit</button>
+        <CommaList
+          label="Domains"
+          help="Agastya will only work on these whitelisted domains"
+          :value="agastyaApiKey.domains"
+          placeholder="Enter a host name without protocol, e.g., oswaldlabs.com"
+          @input="val => (agastyaApiKey.domains = val)"
+        />
+        <h2>Design</h2>
+        <div class="row">
+          <ColorInput
+            :value="agastyaApiKey.backgroundColor"
+            label="Theme color"
+            required
+            @input="val => (agastyaApiKey.backgroundColor = val)"
+          />
+          <ColorInput
+            :value="agastyaApiKey.foregroundColor"
+            label="Text color"
+            required
+            @input="val => (agastyaApiKey.foregroundColor = val)"
+          />
+        </div>
+        <button class="button">Update Agastya API key</button>
         <button
           type="button"
           class="button button--color-danger"
           style="margin-left: 0.5rem"
-          @click.prevent="showDelete = auditWebpage"
+          @click.prevent="showDelete = agastyaApiKey"
         >
-          Delete audit
+          Delete key
         </button>
       </form>
     </div>
     <transition name="modal">
       <Confirm v-if="showDelete" :on-close="() => (showDelete = false)">
-        <h2>Are you sure you want to delete this audit?</h2>
+        <h2>Are you sure you want to delete this Agastya API key?</h2>
         <p>
-          Deleting an audit is not reversible, and you'll need to update any
-          apps using this key.
+          Deleting an Agastya API key is not reversible, and you'll need to
+          update any apps using this key.
         </p>
         <button
           class="button button--color-danger button--state-cta"
-          @click="deleteAuditWebpage(showDelete.id)"
+          @click="deleteAgastyaApiKey(showDelete.id)"
         >
-          Yes, delete audit
+          Yes, delete Agastya API key
         </button>
         <button type="button" class="button" @click="showDelete = false">
           No, don't delete
@@ -96,11 +119,13 @@ import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
+import CommaList from "@/components/form/CommaList.vue";
 import Input from "@/components/form/Input.vue";
+import ColorInput from "@/components/form/ColorInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
 import Select from "@/components/form/Select.vue";
 import { User } from "@/types/auth";
-import { AuditWebpages, emptyPagination, AuditWebpage } from "@/types/manage";
+import { AgastyaApiKeys, emptyPagination, AgastyaApiKey } from "@/types/manage";
 library.add(
   faPencilAlt,
   faArrowDown,
@@ -115,7 +140,9 @@ library.add(
   components: {
     Loading,
     Input,
+    CommaList,
     Confirm,
+    ColorInput,
     TimeAgo,
     FontAwesomeIcon,
     Select,
@@ -125,7 +152,7 @@ library.add(
   middleware: "auth"
 })
 export default class ManageSettings extends Vue {
-  auditWebpages: AuditWebpages = emptyPagination;
+  agastyaApiKeys: AgastyaApiKeys = emptyPagination;
   showDelete = false;
   loading = "";
   repeatEvery = {
@@ -134,23 +161,23 @@ export default class ManageSettings extends Vue {
     2: "Weekly",
     3: "Monthly"
   };
-  auditWebpage: AuditWebpage | null = null;
+  agastyaApiKey: AgastyaApiKey | null = null;
 
   private created() {
-    this.auditWebpages = {
-      ...this.$store.getters["manage/auditWebpages"](this.$route.params.team)
+    this.agastyaApiKeys = {
+      ...this.$store.getters["manage/agastyaApiKeys"](this.$route.params.team)
     };
   }
 
   private load() {
-    this.loading = "Loading your audits";
+    this.loading = "Loading your Agastya API key";
     this.$store
-      .dispatch("manage/getAuditWebpage", {
+      .dispatch("manage/getAgastyaApiKey", {
         team: this.$route.params.team,
         id: this.$route.params.key
       })
-      .then(auditWebpage => {
-        this.auditWebpage = { ...auditWebpage };
+      .then(agastyaApiKey => {
+        this.agastyaApiKey = { ...agastyaApiKey };
       })
       .catch(error => {
         throw new Error(error);
@@ -162,12 +189,12 @@ export default class ManageSettings extends Vue {
     this.load();
   }
 
-  private updateAuditWebpage() {
-    this.loading = "Updating your audit";
-    const key = this.auditWebpage;
+  private updateAgastyaApiKey() {
+    this.loading = "Updating your Agastya API key";
+    const key = this.agastyaApiKey;
     if (key) {
       [
-        "auditWebpage",
+        "agastyaApiKey",
         "secretKey",
         "organizationId",
         "createdAt",
@@ -176,13 +203,13 @@ export default class ManageSettings extends Vue {
       ].forEach(k => delete key[k]);
     }
     this.$store
-      .dispatch("manage/updateAuditWebpage", {
+      .dispatch("manage/updateAgastyaApiKey", {
         team: this.$route.params.team,
         id: this.$route.params.key,
         ...key
       })
-      .then(auditWebpages => {
-        this.auditWebpages = { ...auditWebpages };
+      .then(agastyaApiKeys => {
+        this.agastyaApiKeys = { ...agastyaApiKeys };
       })
       .catch(error => {
         throw new Error(error);
@@ -192,17 +219,17 @@ export default class ManageSettings extends Vue {
       });
   }
 
-  private deleteAuditWebpage(key: string) {
+  private deleteAgastyaApiKey(key: string) {
     this.showDelete = false;
-    this.loading = "Deleting your audit";
+    this.loading = "Deleting your Agastya API key";
     this.$store
-      .dispatch("manage/deleteAuditWebpage", {
+      .dispatch("manage/deleteAgastyaApiKey", {
         team: this.$route.params.team,
         id: key
       })
-      .then(auditWebpages => {
-        this.auditWebpages = { ...auditWebpages };
-        this.$router.push(`/manage/${this.$route.params.team}/audit-webpages`);
+      .then(agastyaApiKeys => {
+        this.agastyaApiKeys = { ...agastyaApiKeys };
+        this.$router.push(`/manage/${this.$route.params.team}/agastya`);
       })
       .catch(error => {
         throw new Error(error);
