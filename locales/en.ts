@@ -311,28 +311,18 @@ export default {
           model: "clicks",
           value: "",
           label: "Clicks",
-          message: "Track when users click on buttons, links, and other elements",
           type: "boolean"
         },
         {
           model: "externalLinks",
           value: "",
           label: "External links",
-          message: "Track when users go to another website from your site",
           type: "boolean"
         },
         {
           model: "unload",
           value: "",
           label: "Time spent",
-          message: "Track exact time spent on a page using unload events",
-          type: "boolean"
-        },
-        {
-          model: "selection",
-          value: "",
-          label: "Selection",
-          message: "Track when users select text on your website",
           type: "boolean"
         }
       ]

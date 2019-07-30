@@ -198,7 +198,7 @@
           </div>
         </div>
         <h3>Read aloud</h3>
-        <div style="font-size: 80%; margin-top: 2rem">{{ agastyaApiKey }}</div>
+        <!-- <div style="font-size: 80%; margin-top: 2rem">{{ agastyaApiKey }}</div> -->
         <div v-if="agastyaApiKey.variables" class="row">
           <Input
             :value="agastyaApiKey.variables.readAloudSelector || ''"

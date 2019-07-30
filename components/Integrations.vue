@@ -128,7 +128,6 @@ export default class Blocks extends Vue {
   }
 
   private update() {
-    console.log(JSON.stringify(this.result));
     this.$emit("input", this.result);
   }
 
