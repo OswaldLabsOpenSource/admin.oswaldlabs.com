@@ -89,7 +89,7 @@ export default {
     2: "Admin",
     3: "Manager",
     4: "Member",
-    5: "Basic"
+    5: "Reseller"
   },
   scopes: {
     orgRead: {

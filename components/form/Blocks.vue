@@ -2,120 +2,148 @@
   <div class="form-group">
     <div class="row">
       <no-ssr>
-        <draggable v-model="arrayValue" :move="save">
-          <transition-group class="blocks-container">
-            <div
-              v-for="(card, i) in arrayValue"
-              :key="`b${i}`"
-              :class="`item item--slug-${card.slug} item--type-${card.type}`"
-            >
-              <div v-if="card.type === 'mode-card'" class="caption">
-                {{ agastyaModes[card.slug] || card.slug }}
-              </div>
-              <div v-else-if="card.type === 'intro-card'" class="caption">
-                <div>
-                  <strong>{{ card.title }}</strong>
+        <div class="blocks-container">
+          <div
+            class="item item--type-header"
+            :style="
+              `background-color: ${backgroundColor}; color: ${foregroundColor}`
+            "
+          >
+            <slot />
+          </div>
+          <draggable v-model="arrayValue" :move="save">
+            <transition-group class="blocks-container-inside">
+              <div
+                v-for="(card, i) in arrayValue"
+                :key="`b${i}`"
+                :class="`item item--slug-${card.slug} item--type-${card.type}`"
+              >
+                <div v-if="card.type === 'mode-card'" class="caption">
+                  <img
+                    class="small-app-icon"
+                    alt=""
+                    :src="`/app-store/${card.slug}.png`"
+                  />
+                  <span>{{ agastyaModes[card.slug] || card.slug }}</span>
                 </div>
-                <div style="margin: 0.5rem 0">{{ card.subtitle }}</div>
-                <button class="fake-button" type="button">
-                  {{ card.cta }}
-                </button>
-                <div v-if="opened.includes(i)" class="edit-settings">
-                  <Input
-                    label="Card title"
-                    :value="card.title"
-                    @input="val => updateVal(i, 'title', val)"
+                <div v-else-if="card.type === 'intro-card'" class="caption">
+                  <div>
+                    <strong>{{ card.title }}</strong>
+                  </div>
+                  <div style="margin: 0.5rem 0">{{ card.subtitle }}</div>
+                  <button class="fake-button" type="button">
+                    {{ card.cta }}
+                  </button>
+                  <div v-if="opened.includes(i)" class="edit-settings">
+                    <Input
+                      label="Card title"
+                      :value="card.title"
+                      @input="val => updateVal(i, 'title', val)"
+                    />
+                    <Input
+                      label="Card subtitle"
+                      :value="card.subtitle"
+                      @input="val => updateVal(i, 'subtitle', val)"
+                    />
+                    <Input
+                      label="Call to action text"
+                      :value="card.cta"
+                      @input="val => updateVal(i, 'cta', val)"
+                    />
+                    <Input
+                      label="Call to action link"
+                      :value="card.url"
+                      help="You can use Agastya protocol URLs like agastya-app:modes/all"
+                      @input="val => updateVal(i, 'url', val)"
+                    />
+                    <button class="button" type="button" @click="opened = []">
+                      <span>Done</span>
+                    </button>
+                  </div>
+                </div>
+                <div v-else-if="card.slug === 'uptime-robot'" class="caption">
+                  <img
+                    class="small-app-icon"
+                    alt=""
+                    :src="`/app-store/uptime-robot.png`"
                   />
-                  <Input
-                    label="Card subtitle"
-                    :value="card.subtitle"
-                    @input="val => updateVal(i, 'subtitle', val)"
+                  <span>Uptime Robot status</span>
+                  <div v-if="opened.includes(i)" class="edit-settings">
+                    <Input
+                      label="API key"
+                      :value="card.key"
+                      @input="val => updateVal(i, 'key', val)"
+                    />
+                    <button class="button" type="button" @click="opened = []">
+                      <span>Done</span>
+                    </button>
+                  </div>
+                </div>
+                <div v-else-if="card.type === 'link-card'" class="caption">
+                  <img
+                    class="small-app-icon"
+                    alt=""
+                    :src="`/app-store/link.png`"
                   />
-                  <Input
-                    label="Call to action text"
-                    :value="card.cta"
-                    @input="val => updateVal(i, 'cta', val)"
-                  />
-                  <Input
-                    label="Call to action link"
-                    :value="card.url"
-                    help="You can use Agastya protocol URLs like agastya-app:modes/all"
-                    @input="val => updateVal(i, 'url', val)"
-                  />
-                  <button class="button" type="button" @click="opened = []">
-                    <span>Done</span>
+                  <span>{{ card.title }}</span>
+                  <div v-if="opened.includes(i)" class="edit-settings">
+                    <Input
+                      label="Link title"
+                      :value="card.title"
+                      @input="val => updateVal(i, 'title', val)"
+                    />
+                    <Input
+                      label="Link URL"
+                      help="You can use Agastya protocol URLs like agastya-app:modes/all"
+                      :value="card.url"
+                      @input="val => updateVal(i, 'url', val)"
+                    />
+                    <button class="button" type="button" @click="opened = []">
+                      <span>Done</span>
+                    </button>
+                  </div>
+                </div>
+                <div v-else class="caption">{{ card.name || card }}</div>
+                <div v-if="!opened.includes(i)" class="actions">
+                  <button
+                    v-if="
+                      ['link-card', 'intro-card'].includes(card.type) ||
+                        ['uptime-robot'].includes(card.slug)
+                    "
+                    aria-label="Edit"
+                    data-balloon-pos="up"
+                    type="button"
+                    class="button button--type-icon button--size-small"
+                    style="margin-right: 0.5rem"
+                    @click="opened.push(i)"
+                  >
+                    <font-awesome-icon
+                      class="icon"
+                      icon="pencil-alt"
+                      fixed-width
+                    />
+                  </button>
+                  <button
+                    aria-label="Delete"
+                    data-balloon-pos="up"
+                    type="button"
+                    class="button button--color-danger button--type-icon button--size-small"
+                    @click="deleteItem(i)"
+                  >
+                    <font-awesome-icon
+                      class="icon icon--color-danger"
+                      icon="trash"
+                      fixed-width
+                    />
                   </button>
                 </div>
               </div>
-              <div v-else-if="card.slug === 'uptime-robot'" class="caption">
-                <span>Uptime Robot status</span>
-                <div v-if="opened.includes(i)" class="edit-settings">
-                  <Input
-                    label="API key"
-                    :value="card.key"
-                    @input="val => updateVal(i, 'key', val)"
-                  />
-                  <button class="button" type="button" @click="opened = []">
-                    <span>Done</span>
-                  </button>
-                </div>
-              </div>
-              <div v-else-if="card.type === 'link-card'" class="caption">
-                <span>{{ card.title }}</span>
-                <div v-if="opened.includes(i)" class="edit-settings">
-                  <Input
-                    label="Link title"
-                    :value="card.title"
-                    @input="val => updateVal(i, 'title', val)"
-                  />
-                  <Input
-                    label="Link URL"
-                    help="You can use Agastya protocol URLs like agastya-app:modes/all"
-                    :value="card.url"
-                    @input="val => updateVal(i, 'url', val)"
-                  />
-                  <button class="button" type="button" @click="opened = []">
-                    <span>Done</span>
-                  </button>
-                </div>
-              </div>
-              <div v-else class="caption">{{ card.name || card }}</div>
-              <div v-if="!opened.includes(i)" class="actions">
-                <button
-                  v-if="
-                    ['link-card', 'intro-card'].includes(card.type) ||
-                      ['uptime-robot'].includes(card.slug)
-                  "
-                  aria-label="Edit"
-                  data-balloon-pos="up"
-                  type="button"
-                  class="button button--type-icon button--size-small"
-                  style="margin-right: 0.5rem"
-                  @click="opened.push(i)"
-                >
-                  <font-awesome-icon
-                    class="icon"
-                    icon="pencil-alt"
-                    fixed-width
-                  />
-                </button>
-                <button
-                  aria-label="Delete"
-                  data-balloon-pos="up"
-                  type="button"
-                  class="button button--color-danger button--type-icon button--size-small"
-                  @click="deleteItem(i)"
-                >
-                  <font-awesome-icon
-                    class="icon icon--color-danger"
-                    icon="trash"
-                    fixed-width
-                  />
-                </button>
-              </div>
-            </div>
-          </transition-group>
-        </draggable>
+            </transition-group>
+          </draggable>
+          <div class="item item--type-footer">
+            Customization options
+          </div>
+        </div>
       </no-ssr>
       <div>
         <button class="button" type="button" @click="() => (showAdd = true)">
@@ -192,6 +220,8 @@ export default class Blocks extends Vue {
   @Prop() label;
   @Prop() required;
   @Prop() help;
+  @Prop({ default: "#333" }) backgroundColor;
+  @Prop({ default: "#333" }) foregroundColor;
   labelId = "";
   showAdd = false;
   arrayValue: any[] = [];
@@ -237,32 +267,54 @@ export default class Blocks extends Vue {
 
 <style lang="scss" scoped>
 .item {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
-  width: 50%;
-  text-align: center;
+  background-color: #fff;
+  border-radius: 0.2rem;
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  width: 49%;
   position: relative;
   cursor: move;
   &.item--type-intro-card,
   &.item--type-link-card,
+  &.item--type-header,
+  &.item--type-footer,
   &.item--type-app-card {
     width: 100%;
   }
   .actions {
     position: absolute;
+    z-index: 1;
     right: 0.5rem;
     top: 0.5rem;
   }
+  &.item--type-header {
+    box-shadow: none;
+    margin-bottom: 0;
+    border-radius: 0.75rem 0.75rem 0 0;
+    text-align: left;
+    padding: 1rem;
+  }
+  &.item--type-footer {
+    border-radius: 0 0 0.75rem 0.75rem;
+    background-color: #eee;
+    margin-top: -0.75rem;
+    text-align: center;
+  }
 }
-.blocks-container {
+.blocks-container-inside {
   display: flex;
   flex-wrap: wrap;
+  background-color: #eee;
+  padding: 0.5rem;
+  justify-content: space-between;
 }
 .caption {
+  white-space: nowrap;
   margin: 0.5rem 0;
 }
 .edit-settings {
-  text-align: left;
+  margin-top: 1rem;
 }
 .blocks-list {
   display: flex;

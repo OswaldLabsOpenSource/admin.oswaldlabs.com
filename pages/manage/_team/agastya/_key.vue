@@ -31,21 +31,23 @@
         @submit.prevent="updateAgastyaApiKey"
       >
         <h2>Settings</h2>
-        <Input
-          :value="agastyaApiKey.name"
-          label="Name"
-          placeholder="Enter a name for this Agastya API key"
-          required
-          @input="val => (agastyaApiKey.name = val)"
-        />
-        <Input
-          :value="agastyaApiKey.slug"
-          label="API key"
-          placeholder="Enter a unique, vanity API key"
-          help="Changing your API key can have unintended side effects"
-          required
-          @input="val => (agastyaApiKey.slug = val)"
-        />
+        <div class="row">
+          <Input
+            :value="agastyaApiKey.name"
+            label="Name"
+            placeholder="Enter a name for this Agastya API key"
+            required
+            @input="val => (agastyaApiKey.name = val)"
+          />
+          <Input
+            :value="agastyaApiKey.slug"
+            label="API key"
+            placeholder="Enter a unique, vanity API key"
+            help="Changing your API key can have unintended side effects"
+            required
+            @input="val => (agastyaApiKey.slug = val)"
+          />
+        </div>
         <CommaList
           label="Domains"
           help="Agastya will only work on these whitelisted domains"
@@ -64,18 +66,103 @@
           <ColorInput
             :value="agastyaApiKey.foregroundColor"
             label="Text color"
+            :colors="{
+              '#ffffff': 'White',
+              '#000000': 'Black'
+            }"
             required
             @input="val => (agastyaApiKey.foregroundColor = val)"
           />
         </div>
+        <div class="text text--mb-2">
+          <div v-if="contrast.isAccessible">
+            <font-awesome-icon
+              class="icon icon--color-success"
+              icon="check-circle"
+              fixed-width
+            />
+            <span>Contrast ratio complies with {{ contrast.score }}</span>
+          </div>
+          <div v-else>
+            <font-awesome-icon
+              class="icon icon--color-danger"
+              icon="times-circle"
+              fixed-width
+            />
+            <span>Contrast ratio is too low ({{ contrast.ratio }})</span>
+          </div>
+        </div>
+        <div v-if="agastyaApiKey.variables">
+          <div class="row">
+            <div>
+              <Checkbox
+                :value="agastyaApiKey.variables.displayNone"
+                label="Hide the Agastya button from my website"
+                help="Your users will not be able to open Agastya, you can still use the API"
+                @input="val => updateValue('variables', 'displayNone', val)"
+              />
+              <Checkbox
+                :value="agastyaApiKey.variables.captioned"
+                label="Always show the Agastya label"
+                help="If you don't check this option, the label will appear on mouse over"
+                @input="val => updateValue('variables', 'captioned', val)"
+              />
+            </div>
+            <div>
+              <Input
+                :value="agastyaApiKey.variables.headingText || ''"
+                label="Heading"
+                placeholder="e.g., Help and Accessibility"
+                @input="val => updateValue('variables', 'headingText', val)"
+              />
+              <Input
+                :value="agastyaApiKey.variables.subheadingText || ''"
+                label="Subheading"
+                placeholder="e.g., your website name"
+                @input="val => updateValue('variables', 'subheadingText', val)"
+              />
+            </div>
+          </div>
+        </div>
         <h2>Layout</h2>
-        <Blocks
-          :value="agastyaApiKey.layout"
-          :options="agastyaBlocks"
-          @input="val => (agastyaApiKey.layout = val)"
-        />
-        <div style="font-size: 80%; margin-top: 2rem">
-          {{ agastyaApiKey.layout }}
+        <div>
+          <Blocks
+            :value="agastyaApiKey.layout"
+            :options="agastyaBlocks"
+            :background-color="agastyaApiKey.backgroundColor"
+            :foreground-color="agastyaApiKey.foregroundColor"
+            @input="val => (agastyaApiKey.layout = val)"
+          >
+            <div v-if="agastyaApiKey.variables">
+              <div class="heading-text">
+                {{ agastyaApiKey.variables.headingText }}
+              </div>
+              <div class="subheading-text">
+                {{ agastyaApiKey.variables.subheadingText }}
+              </div>
+            </div>
+          </Blocks>
+        </div>
+        <h2>Integrations</h2>
+        <p>Hello</p>
+        <h2>Mode settings</h2>
+        <h3>Read aloud</h3>
+        <!-- <div style="font-size: 80%; margin-top: 2rem">{{ agastyaApiKey }}</div> -->
+        <div v-if="agastyaApiKey.variables" class="row">
+          <Input
+            :value="agastyaApiKey.variables.readAloudSelector || ''"
+            label="CSS selector"
+            help="A CSS selector for the main content of your page for Read Aloud"
+            placeholder="e.g., main#content"
+            @input="val => updateValue('variables', 'readAloudSelector', val)"
+          />
+          <Select
+            :value="agastyaApiKey.variables.readAloudLanguage || 'en-us'"
+            label="Pronunciation accent"
+            help="We'll use this as the default accent for Read Aloud"
+            :options="readAloudLanguages"
+            @input="val => updateValue('variables', 'readAloudLanguage', val)"
+          />
         </div>
         <button class="button">Update Agastya API key</button>
         <button
@@ -110,11 +197,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 import { getAllCountries } from "countries-and-timezones";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import contrast from "get-contrast";
 import {
   faPencilAlt,
   faArrowDown,
@@ -122,7 +210,9 @@ import {
   faTrash,
   faEye,
   faEyeSlash,
-  faArrowLeft
+  faArrowLeft,
+  faCheckCircle,
+  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
@@ -144,7 +234,9 @@ library.add(
   faTrash,
   faEye,
   faEyeSlash,
-  faArrowLeft
+  faArrowLeft,
+  faCheckCircle,
+  faTimesCircle
 );
 const agastyaModes = en.agastyaModes;
 
@@ -165,7 +257,6 @@ const agastyaModes = en.agastyaModes;
   middleware: "auth"
 })
 export default class ManageSettings extends Vue {
-  agastyaApiKeys: AgastyaApiKeys = emptyPagination;
   agastyaModes = agastyaModes;
   showDelete = false;
   loading = "";
@@ -282,7 +373,128 @@ export default class ManageSettings extends Vue {
       slug: "share"
     }
   ];
-
+  readAloudLanguages = {
+    "en-us": "English (US)",
+    "en-gb": "English (UK)",
+    "en-au": "English (Australia)",
+    "da-dk": "Danish (Denmark)",
+    "nl-nl": "Dutch (Netherlands)",
+    "fr-ca": "French (Canada)",
+    "fr-fr": "French (France)",
+    "de-de": "German (Germany)",
+    "it-it": "Italian (Italy)",
+    "ja-jp": "Japanese (Japan)",
+    "ko-kr": "Korean (South Korea)",
+    "pl-pl": "Polish (Poland)",
+    "pt-br": "Portuguese (Brazil)",
+    "pt-pt": "Portuguese (Portugal)",
+    "ru-ru": "Russian (Russia)",
+    "sk-sk": "Slovak (Slovakia)",
+    "sv-se": "Swedish (Sweden)",
+    "tr-tr": "Turkish (Turkey)",
+    "uk-ua": "Ukrainian (Ukraine)",
+    "af-za": "Afrikaans (South Africa)",
+    "am-et": "Amharic (Ethiopia)",
+    "hy-am": "Armenian (Armenia)",
+    "az-az": "Azerbaijani (Azerbaijan)",
+    "id-id": "Indonesian (Indonesia)",
+    "ms-my": "Malay (Malaysia)",
+    "bn-bd": "Bengali (Bangladesh)",
+    "bn-in": "Bengali (India)",
+    "ca-es": "Catalan (Spain)",
+    "cs-cz": "Czech (Czech Republic)",
+    "en-ca": "English (Canada)",
+    "en-gh": "English (Ghana)",
+    "en-in": "English (India)",
+    "en-ie": "English (Ireland)",
+    "en-ke": "English (Kenya)",
+    "en-nz": "English (New Zealand)",
+    "en-ng": "English (Nigeria)",
+    "en-ph": "English (Philippines)",
+    "en-sg": "English (Singapore)",
+    "en-za": "English (South Africa)",
+    "en-tz": "English (Tanzania)",
+    "es-ar": "Spanish (Argentina)",
+    "es-bo": "Spanish (Bolivia)",
+    "es-cl": "Spanish (Chile)",
+    "es-co": "Spanish (Colombia)",
+    "es-cr": "Spanish (Costa Rica)",
+    "es-ec": "Spanish (Ecuador)",
+    "es-sv": "Spanish (El Salvador)",
+    "es-es": "Spanish (Spain)",
+    "es-us": "Spanish (United States)",
+    "es-gt": "Spanish (Guatemala)",
+    "es-hn": "Spanish (Honduras)",
+    "es-mx": "Spanish (Mexico)",
+    "es-ni": "Spanish (Nicaragua)",
+    "es-pa": "Spanish (Panama)",
+    "es-py": "Spanish (Paraguay)",
+    "es-pe": "Spanish (Peru)",
+    "es-pr": "Spanish (Puerto Rico)",
+    "es-do": "Spanish (Dominican Republic)",
+    "es-uy": "Spanish (Uruguay)",
+    "es-ve": "Spanish (Venezuela)",
+    "eu-es": "Basque (Spain)",
+    "fil-ph": "Filipino (Philippines)",
+    "gl-es": "Galician (Spain)",
+    "ka-ge": "Georgian (Georgia)",
+    "gu-in": "Gujarati (India)",
+    "hr-hr": "Croatian (Croatia)",
+    "zu-za": "Zulu (South Africa)",
+    "is-is": "Icelandic (Iceland)",
+    "jv-id": "Javanese (Indonesia)",
+    "kn-in": "Kannada (India)",
+    "km-kh": "Khmer (Cambodia)",
+    "lo-la": "Lao (Laos)",
+    "lv-lv": "Latvian (Latvia)",
+    "lt-lt": "Lithuanian (Lithuania)",
+    "hu-hu": "Hungarian (Hungary)",
+    "ml-in": "Malayalam (India)",
+    "mr-in": "Marathi (India)",
+    "ne-np": "Nepali (Nepal)",
+    "nb-no": "Norwegian Bokmål (Norway)",
+    "ro-ro": "Romanian (Romania)",
+    "si-lk": "Sinhala (Sri Lanka)",
+    "sl-si": "Slovenian (Slovenia)",
+    "su-id": "Sundanese (Indonesia)",
+    "sw-tz": "Swahili (Tanzania)",
+    "sw-ke": "Swahili (Kenya)",
+    "fi-fi": "Finnish (Finland)",
+    "ta-in": "Tamil (India)",
+    "ta-sg": "Tamil (Singapore)",
+    "ta-lk": "Tamil (Sri Lanka)",
+    "ta-my": "Tamil (Malaysia)",
+    "te-in": "Telugu (India)",
+    "vi-vn": "Vietnamese (Vietnam)",
+    "ur-pk": "Urdu (Pakistan)",
+    "ur-in": "Urdu (India)",
+    "el-gr": "Greek (Greece)",
+    "bg-bg": "Bulgarian (Bulgaria)",
+    "sr-rs": "Serbian (Serbia)",
+    "he-il": "Hebrew (Israel)",
+    "ar-il": "Arabic (Israel)",
+    "ar-jo": "Arabic (Jordan)",
+    "ar-ae": "Arabic (United Arab Emirates)",
+    "ar-bh": "Arabic (Bahrain)",
+    "ar-dz": "Arabic (Algeria)",
+    "ar-sa": "Arabic (Saudi Arabia)",
+    "ar-iq": "Arabic (Iraq)",
+    "ar-kw": "Arabic (Kuwait)",
+    "ar-ma": "Arabic (Morocco)",
+    "ar-tn": "Arabic (Tunisia)",
+    "ar-om": "Arabic (Oman)",
+    "ar-ps": "Arabic (State of Palestine)",
+    "ar-qa": "Arabic (Qatar)",
+    "ar-lb": "Arabic (Lebanon)",
+    "ar-eg": "Arabic (Egypt)",
+    "fa-ir": "Persian (Iran)",
+    "hi-in": "Hindi (India)",
+    "th-th": "Thai (Thailand)",
+    "zh-tw": "Chinese, Mandarin (Traditional, Taiwan)",
+    "yue-hant-hk": "Chinese, Cantonese (Traditional, Hong Kong)",
+    "zh-hk": "Chinese, Mandarin (Simplified, Hong Kong)",
+    zh: "Chinese, Mandarin (Simplified, China)"
+  };
   private created() {
     this.agastyaApiKey = {
       ...this.$store.getters["manage/agastyaApiKey"](
@@ -312,9 +524,60 @@ export default class ManageSettings extends Vue {
     this.load();
   }
 
+  private updateValue(type: string, variable: string, value: string | boolean) {
+    if (this.agastyaApiKey) {
+      const agastyaApiKey = JSON.parse(JSON.stringify(this.agastyaApiKey));
+      agastyaApiKey[type] = agastyaApiKey[type] || {};
+      if (value) {
+        agastyaApiKey[type][variable] = value;
+      } else {
+        delete agastyaApiKey[type][variable];
+      }
+      this.agastyaApiKey = { ...agastyaApiKey };
+    }
+  }
+
+  get contrast() {
+    if (
+      !this.agastyaApiKey ||
+      !this.agastyaApiKey.backgroundColor ||
+      !this.agastyaApiKey.foregroundColor
+    ) {
+      return {
+        ratio: 1,
+        score: 0,
+        isAccessible: false
+      };
+    }
+    try {
+      return {
+        ratio: contrast
+          .ratio(
+            this.agastyaApiKey.backgroundColor,
+            this.agastyaApiKey.foregroundColor
+          )
+          .toFixed(2),
+        score: contrast.score(
+          this.agastyaApiKey.backgroundColor,
+          this.agastyaApiKey.foregroundColor
+        ),
+        isAccessible: contrast.isAccessible(
+          this.agastyaApiKey.backgroundColor,
+          this.agastyaApiKey.foregroundColor
+        )
+      };
+    } catch (error) {
+      return {
+        ratio: 1,
+        score: 0,
+        isAccessible: false
+      };
+    }
+  }
+
   private updateAgastyaApiKey() {
     this.loading = "Updating your Agastya API key";
-    const key = this.agastyaApiKey;
+    const key = { ...this.agastyaApiKey };
     if (key) {
       [
         "agastyaApiKey",
@@ -331,8 +594,8 @@ export default class ManageSettings extends Vue {
         id: this.$route.params.key,
         ...key
       })
-      .then(agastyaApiKeys => {
-        this.agastyaApiKeys = { ...agastyaApiKeys };
+      .then(agastyaApiKey => {
+        this.agastyaApiKey = { ...agastyaApiKey };
       })
       .catch(error => {
         throw new Error(error);
@@ -350,8 +613,8 @@ export default class ManageSettings extends Vue {
         team: this.$route.params.team,
         id: key
       })
-      .then(agastyaApiKeys => {
-        this.agastyaApiKeys = { ...agastyaApiKeys };
+      .then(agastyaApiKey => {
+        this.agastyaApiKey = { ...agastyaApiKey };
         this.$router.push(`/manage/${this.$route.params.team}/agastya`);
       })
       .catch(error => {

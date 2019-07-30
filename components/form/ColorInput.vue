@@ -21,6 +21,16 @@
           class="input input--font-monospace"
           @input="$emit('input', $event.target.value)"
         />
+        <div class="list list--type-colors">
+          <button
+            v-for="(color, i) in colors"
+            :key="`c${color}${i}`"
+            :aria-label="color"
+            type="button"
+            :style="`background: ${i}`"
+            @click="$emit('input', i)"
+          />
+        </div>
       </div>
     </div>
     <div
@@ -38,6 +48,23 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 @Component
 export default class Input extends Vue {
   @Prop({ default: "text" }) type;
+  @Prop({
+    default: () => {
+      return {
+        "#d30000": "Red",
+        "#e65722": "Orange",
+        "#9d8319": "Reef gold",
+        "#4b6a88": "Blue gray",
+        "#555555": "Gray",
+        "#e000e0": "Pink",
+        "#e73c70": "Magenta",
+        "#1978d4": "Blue",
+        "#008080": "Teal",
+        "#28a228": "Green"
+      };
+    }
+  })
+  colors;
   @Prop() value;
   @Prop() label;
   @Prop() required;
@@ -58,8 +85,20 @@ export default class Input extends Vue {
 
 <style lang="scss">
 .input--type-color {
-  width: 4rem;
+  width: 3rem;
   border-radius: 0.2rem;
   border: 1px solid rgba(63, 81, 181, 0.15);
+}
+.list--type-colors {
+  display: flex;
+  > button {
+    border: 1px solid rgba(63, 81, 181, 0.15);
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 100%;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    box-sizing: border-box;
+  }
 }
 </style>

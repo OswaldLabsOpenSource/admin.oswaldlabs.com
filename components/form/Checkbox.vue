@@ -20,7 +20,7 @@
     </label>
     <div
       v-if="help && !questionMark"
-      class="text text--size-small text--color-light text--lh-1 text text--mt-05"
+      class="text text--size-small text--color-light text--lh-1 text text--mt-m025"
     >
       {{ help }}
     </div>
