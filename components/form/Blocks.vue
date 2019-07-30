@@ -31,7 +31,13 @@
                     <strong>{{ card.title }}</strong>
                   </div>
                   <div style="margin: 0.5rem 0">{{ card.subtitle }}</div>
-                  <button class="fake-button" type="button">
+                  <button
+                    class="fake-button"
+                    type="button"
+                    :style="
+                      `background-color: ${backgroundColor}; color: ${foregroundColor}`
+                    "
+                  >
                     {{ card.cta }}
                   </button>
                   <div v-if="opened.includes(i)" class="edit-settings">
@@ -103,7 +109,14 @@
                     </button>
                   </div>
                 </div>
-                <div v-else class="caption">{{ card.name || card }}</div>
+                <div v-else class="caption">
+                  <img
+                    class="small-app-icon"
+                    alt=""
+                    :src="`/app-store/${card.slug}.png`"
+                  />
+                  {{ card.name || card }}
+                </div>
                 <div v-if="!opened.includes(i)" class="actions">
                   <button
                     v-if="
@@ -334,8 +347,7 @@ export default class Blocks extends Vue {
   font: inherit;
   padding: 0.25rem 1rem;
   border-radius: 2rem;
-  border: 1px solid;
-  background: transparent;
+  border: none;
 }
 .small-app-icon {
   width: 2rem;

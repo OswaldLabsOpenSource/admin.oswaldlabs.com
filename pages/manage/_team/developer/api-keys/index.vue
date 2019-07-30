@@ -110,7 +110,7 @@
         your applications. <strong>Important note: </strong>These API keys are
         for Oswald Labs Platform APIs, not Agastya. If you're looking for your
         Agastya API key, you can
-        <router-link :to="`/manage/${$route.params.team}/agastya-api-keys`"
+        <router-link :to="`/manage/${$route.params.team}/agastya`"
           >go to Agastya API keys instead</router-link
         >.
       </p>

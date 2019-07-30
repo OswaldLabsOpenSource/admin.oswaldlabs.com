@@ -145,9 +145,56 @@
         </div>
         <h2>Integrations</h2>
         <p>Hello</p>
-        <h2>Mode settings</h2>
+        <h2>Advanced</h2>
+        <h3>Custom CSS</h3>
+        <KeyValueList
+          label="CSS rules"
+          :value="agastyaApiKey.customCss"
+          :key-options="agastyaCustomCssKeys"
+          key-label="Accessibility mode"
+          value-label="CSS code"
+          :code="true"
+          @input="val => (agastyaApiKey.customCss = val)"
+        />
+        <h3>Links</h3>
+        <div v-if="agastyaApiKey.variables" class="row">
+          <div>
+            <Input
+              type="url"
+              :value="agastyaApiKey.variables.homepageLink || ''"
+              label="Homepage"
+              help="Link to your website's homepage"
+              @input="val => updateValue('variables', 'homepageLink', val)"
+            />
+            <Input
+              type="url"
+              :value="agastyaApiKey.variables.privacyPolicyLink || ''"
+              label="Privacy Policy"
+              help="Link to your privacy policy for EU cookie law compliance"
+              @input="val => updateValue('variables', 'privacyPolicyLink', val)"
+            />
+          </div>
+          <div>
+            <Input
+              type="url"
+              :value="agastyaApiKey.variables.websiteSettingsLink || ''"
+              label="Website settings"
+              help="If you have a settings page for users, link that here"
+              @input="
+                val => updateValue('variables', 'websiteSettingsLink', val)
+              "
+            />
+            <Input
+              type="url"
+              :value="agastyaApiKey.variables.cookiePolicyLink || ''"
+              label="Cookie Policy"
+              help="Link to your cookie policy for EU cookie law compliance"
+              @input="val => updateValue('variables', 'cookiePolicyLink', val)"
+            />
+          </div>
+        </div>
         <h3>Read aloud</h3>
-        <!-- <div style="font-size: 80%; margin-top: 2rem">{{ agastyaApiKey }}</div> -->
+        <div style="font-size: 80%; margin-top: 2rem">{{ agastyaApiKey }}</div>
         <div v-if="agastyaApiKey.variables" class="row">
           <Input
             :value="agastyaApiKey.variables.readAloudSelector || ''"
@@ -219,6 +266,7 @@ import Confirm from "@/components/Confirm.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
 import CommaList from "@/components/form/CommaList.vue";
+import KeyValueList from "@/components/form/KeyValueList.vue";
 import Input from "@/components/form/Input.vue";
 import Blocks from "@/components/form/Blocks.vue";
 import ColorInput from "@/components/form/ColorInput.vue";
@@ -239,6 +287,30 @@ library.add(
   faTimesCircle
 );
 const agastyaModes = en.agastyaModes;
+const agastyaCustomCssKeys = {};
+[
+  "dyslexia",
+  "night",
+  "blue-light-filter",
+  "large-font",
+  "read-aloud",
+  "translate",
+  "reading-mode",
+  "contrast",
+  "keyboard-nav",
+  "desaturate",
+  "big-cursor",
+  "legible-fonts",
+  "highlight-links",
+  "line-height",
+  "word-spacing",
+  "letter-spacing",
+  "font-size",
+  "font-family",
+  "landmark-color"
+].forEach(val => {
+  agastyaCustomCssKeys[val] = en.agastyaModes[val];
+});
 
 @Component({
   components: {
@@ -252,7 +324,8 @@ const agastyaModes = en.agastyaModes;
     FontAwesomeIcon,
     Select,
     LargeMessage,
-    Checkbox
+    Checkbox,
+    KeyValueList
   },
   middleware: "auth"
 })
@@ -267,6 +340,7 @@ export default class ManageSettings extends Vue {
     3: "Monthly"
   };
   agastyaApiKey: AgastyaApiKey | null = null;
+  agastyaCustomCssKeys = agastyaCustomCssKeys;
   agastyaBlocks = [
     {
       type: "mode-card",

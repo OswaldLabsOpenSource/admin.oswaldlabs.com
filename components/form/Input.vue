@@ -10,6 +10,7 @@
       :required="required"
       :min="min"
       :max="max"
+      :class="code ? 'input input--font-monospace' : ''"
       v-bind="$attrs"
       @input="$emit('input', $event.target.value)"
     />
@@ -36,6 +37,7 @@ export default class Input extends Vue {
   @Prop() autocomplete;
   @Prop() min;
   @Prop() max;
+  @Prop({ default: false }) code;
   labelId = "";
 
   private created() {
