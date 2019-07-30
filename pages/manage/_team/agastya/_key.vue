@@ -144,7 +144,11 @@
           </Blocks>
         </div>
         <h2>Integrations</h2>
-        <p>Hello</p>
+        <Integrations
+          :integrations="integrations"
+          :value="agastyaApiKey.integrations"
+          @input="val => (agastyaApiKey.integrations = val)"
+        />
         <h2>Advanced</h2>
         <h3>Custom CSS</h3>
         <KeyValueList
@@ -263,6 +267,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
+import Integrations from "@/components/Integrations.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
 import CommaList from "@/components/form/CommaList.vue";
@@ -287,6 +292,7 @@ library.add(
   faTimesCircle
 );
 const agastyaModes = en.agastyaModes;
+const integrations = en.integrations;
 const agastyaCustomCssKeys = {};
 [
   "dyslexia",
@@ -323,6 +329,7 @@ const agastyaCustomCssKeys = {};
     TimeAgo,
     FontAwesomeIcon,
     Select,
+    Integrations,
     LargeMessage,
     Checkbox,
     KeyValueList
@@ -341,6 +348,7 @@ export default class ManageSettings extends Vue {
   };
   agastyaApiKey: AgastyaApiKey | null = null;
   agastyaCustomCssKeys = agastyaCustomCssKeys;
+  integrations = integrations;
   agastyaBlocks = [
     {
       type: "mode-card",
