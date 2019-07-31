@@ -323,7 +323,6 @@ export default class Blocks extends Vue {
   justify-content: space-between;
 }
 .caption {
-  white-space: nowrap;
   margin: 0.5rem 0;
 }
 .edit-settings {
