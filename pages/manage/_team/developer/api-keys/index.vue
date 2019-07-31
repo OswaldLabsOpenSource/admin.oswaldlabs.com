@@ -104,29 +104,31 @@
           </button>
         </div>
       </div>
-      <h2>Create API key</h2>
-      <p>
-        You can use API keys to programmatically access Oswald Labs Platform in
-        your applications. <strong>Important note: </strong>These API keys are
-        for Oswald Labs Platform APIs, not Agastya. If you're looking for your
-        Agastya API key, you can
-        <router-link :to="`/manage/${$route.params.team}/agastya`"
-          >go to Agastya API keys instead</router-link
-        >.
-      </p>
-      <form @submit.prevent="createApiKey">
-        <CheckList
-          label="API restrictions"
-          :options="scopes"
-          :value="newScopes"
-          placeholder="Enter an IP address or CIDR, e.g., 192.168.1.1/42"
-          @input="val => (newScopes = val)"
-        />
-        <p class="text text--color-muted text--size-small">
-          You can add IP and referrer restrictions after creating the API key.
+      <div v-if="loggedInMembership !== 3 && loggedInMembership !== 4">
+        <h2>Create API key</h2>
+        <p>
+          You can use API keys to programmatically access Oswald Labs Platform
+          in your applications. <strong>Important note: </strong>These API keys
+          are for Oswald Labs Platform APIs, not Agastya. If you're looking for
+          your Agastya API key, you can
+          <router-link :to="`/manage/${$route.params.team}/agastya`"
+            >go to Agastya API keys instead</router-link
+          >.
         </p>
-        <button class="button">Create API key</button>
-      </form>
+        <form @submit.prevent="createApiKey">
+          <CheckList
+            label="API restrictions"
+            :options="scopes"
+            :value="newScopes"
+            placeholder="Enter an IP address or CIDR, e.g., 192.168.1.1/42"
+            @input="val => (newScopes = val)"
+          />
+          <p class="text text--color-muted text--size-small">
+            You can add IP and referrer restrictions after creating the API key.
+          </p>
+          <button class="button">Create API key</button>
+        </form>
+      </div>
     </div>
     <transition name="modal">
       <Confirm v-if="showDelete" :on-close="() => (showDelete = null)">
@@ -196,11 +198,15 @@ export default class ManageSettings extends Vue {
   loading = "";
   newScopes = "orgRead";
   scopes = scopes;
+  loggedInMembership = 3;
 
   private created() {
     this.apiKeys = {
       ...this.$store.getters["manage/apiKeys"](this.$route.params.team)
     };
+    this.loggedInMembership = parseInt(
+      this.$store.getters["manage/loggedInMembership"](this.$route.params.team)
+    );
   }
 
   private load() {

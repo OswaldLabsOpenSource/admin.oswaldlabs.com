@@ -207,9 +207,13 @@ export interface SingleAgastyaApiKeyKV {
     [index: string]: AgastyaApiKey;
   };
 }
+export interface LoggedInMembershipsKV {
+  [index: string]: number;
+}
 
 export interface RootState {
   membership?: Membership;
+  loggedInMembership: LoggedInMembershipsKV;
   organizations: OrganizationsKV;
   memberships: MembershipsKV;
   subscriptions: SubscriptionsKV;

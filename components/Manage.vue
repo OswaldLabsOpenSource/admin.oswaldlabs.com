@@ -24,11 +24,16 @@
           <font-awesome-icon class="nav-icon" icon="history" fixed-width />
           <span>Audits</span>
         </nuxt-link>
-        <nuxt-link class="item" :to="`/manage/${$route.params.team}/members`">
+        <nuxt-link
+          v-if="loggedInMembership !== 4"
+          class="item"
+          :to="`/manage/${$route.params.team}/members`"
+        >
           <font-awesome-icon class="nav-icon" icon="users" fixed-width />
           <span>Team</span>
         </nuxt-link>
         <nuxt-link
+          v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
           class="item"
           :to="`/manage/${$route.params.team}/subscription`"
         >
@@ -36,6 +41,7 @@
           <span>Subscription</span>
         </nuxt-link>
         <nuxt-link
+          v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
           class="item item--type-parent"
           :to="`/manage/${$route.params.team}/billing/details`"
         >
@@ -129,11 +135,46 @@ library.add(
   }
 })
 export default class Manage extends Vue {
+  loggedInMembership = 3;
+  private created() {
+    this.loggedInMembership = parseInt(
+      this.$store.getters["manage/loggedInMembership"](this.$route.params.team)
+    );
+  }
   private mounted() {
     this.update();
   }
   private update() {
     this.$store.commit("auth/setActiveOrganization", this.$route.params.team);
+    this.getUserMembership();
+  }
+  private getUserMembership() {
+    const user = this.$store.state.auth.user;
+    if (user) {
+      const org = this.$store.state.auth.activeOrganization;
+      if (org) {
+        const memberships = this.$store.state.settings.memberships;
+        if (memberships) {
+          const yourMembership = memberships.data.filter(
+            membership =>
+              membership.organization.id === org ||
+              membership.organization.username === org
+          );
+          if (yourMembership.length) {
+            const role = yourMembership[0].role;
+            this.$store.commit("manage/setLoggedInMembership", {
+              team: org,
+              role
+            });
+          }
+        } else {
+          this.$store
+            .dispatch("users/getMemberships", { slug: user.username })
+            .then(() => this.getUserMembership())
+            .catch(() => {});
+        }
+      }
+    }
   }
   @Watch("$route.path")
   onRouteChanged() {
