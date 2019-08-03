@@ -34,14 +34,6 @@
         </nuxt-link>
         <nuxt-link
           v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
-          class="item"
-          :to="`/manage/${$route.params.team}/subscription`"
-        >
-          <font-awesome-icon class="nav-icon" icon="box-open" fixed-width />
-          <span>Subscription</span>
-        </nuxt-link>
-        <nuxt-link
-          v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
           class="item item--type-parent"
           :to="`/manage/${$route.params.team}/billing/details`"
         >
