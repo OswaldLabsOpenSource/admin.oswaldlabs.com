@@ -36,7 +36,7 @@
             <tr>
               <th>Name</th>
               <th>Agastya API key</th>
-              <th>Created</th>
+              <th>Plan</th>
               <th></th>
             </tr>
           </thead>
@@ -49,7 +49,7 @@
               <td>
                 <code>{{ agastyaApiKey.slug }}</code>
               </td>
-              <td><TimeAgo :date="agastyaApiKey.createdAt" /></td>
+              <td>{{ agastyaApiKey.subscriptionId ? "Pro" : "Free" }}</td>
               <td class="text text--align-right">
                 <router-link
                   :to="

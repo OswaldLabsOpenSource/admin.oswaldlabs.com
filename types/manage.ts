@@ -1,4 +1,4 @@
-import { subscriptions, invoices, sources } from "stripe";
+import { subscriptions, invoices, sources, customers } from "stripe";
 import { IdRow, Row, Paginated } from "./root";
 
 export interface Organization extends IdRow {
@@ -54,6 +54,8 @@ export interface AgastyaApiKey extends IdRow {
   backgroundColor: string;
   foregroundColor: string;
   domains: string;
+  subscriptionId?: string;
+  subscription?: subscriptions.ISubscription;
   customCss: {
     title: string;
     css: string;

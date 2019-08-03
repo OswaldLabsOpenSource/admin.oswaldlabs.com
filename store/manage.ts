@@ -3,7 +3,6 @@ import download from "downloadjs";
 import Vue from "vue";
 import { RootState, Organization, emptyPagination } from "~/types/manage";
 
-const stripeProductId = "prod_FGFAYQGEFTm2lu";
 export const state = (): RootState => ({
   memberships: {},
   isDownloading: false,
@@ -377,6 +376,18 @@ export const actions: ActionTree<RootState, RootState> = {
     commit("setSubscription", { team, subscription, id });
     return subscription;
   },
+  async revertAgastyaSubscription({ dispatch }, context) {
+    await this.$axios.post(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}/subscription/revert`
+    );
+    return dispatch("getAgastyaApiKey", { team: context.team, id: context.id });
+  },
+  async cancelAgastyaSubscription({ dispatch }, context) {
+    await this.$axios.delete(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}/subscription`
+    );
+    return dispatch("getAgastyaApiKey", { team: context.team, id: context.id });
+  },
   async editSubscription({ dispatch }, context) {
     const data = { ...context };
     delete data.id;
@@ -391,11 +402,15 @@ export const actions: ActionTree<RootState, RootState> = {
     await this.$axios.put(`/organizations/${team}/subscriptions`, { plan });
     return dispatch("getSubscriptions", { team });
   },
+  async createAgastyaSubscription({ dispatch }, { team, id, plan }) {
+    await this.$axios.put(`/organizations/${team}/agastya-api-keys/${id}/subscription`, { plan });
+  },
   async getPricingPlans({ commit }, context) {
     const subscriptions: any = (await this.$axios.get(
-      `/organizations/${context}/pricing/${stripeProductId}`
+      `/organizations/${context}/pricing`
     )).data;
     commit("setPricingPlans", subscriptions);
+    return subscriptions;
   },
   async getSources({ commit }, { team, start = 0 }) {
     const sources: any = (await this.$axios.get(

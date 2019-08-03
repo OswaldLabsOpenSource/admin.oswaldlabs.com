@@ -244,6 +244,107 @@
         </button>
       </Confirm>
     </transition>
+    <div v-if="!loading && agastyaApiKey" class="text text--mt-2">
+      <h2>Subscription</h2>
+      <div v-if="agastyaApiKey && agastyaApiKey.subscriptionId">
+        <div
+          v-if="agastyaApiKey.subscription && agastyaApiKey.subscription.plan"
+        >
+          <ul>
+            <li>
+              <strong>Plan: </strong>
+              <span>{{ agastyaApiKey.subscription.plan.nickname }}</span>
+              <span
+                :class="
+                  `label label--color-${agastyaApiKey.subscription.status}`
+                "
+                >{{ agastyaApiKey.subscription.status }}</span
+              >
+            </li>
+            <li>
+              <strong>Price: </strong>
+              <span>{{
+                (
+                  agastyaApiKey.subscription.plan.currency || "eur"
+                ).toUpperCase()
+              }}</span>
+              <span>{{
+                agastyaApiKey.subscription.plan.amount | currency
+              }}</span>
+              <span>per {{ agastyaApiKey.subscription.plan.interval }}</span>
+            </li>
+            <li v-if="agastyaApiKey.subscription.cancel_at">
+              <strong>Cancels: </strong>
+              <TimeAgo :date="agastyaApiKey.subscription.cancel_at * 1000" />
+            </li>
+          </ul>
+          <button
+            v-if="!agastyaApiKey.subscription.cancel_at"
+            type="button"
+            class="button button--color-danger"
+            @click="cancelSubscription"
+          >
+            Cancel subscription
+          </button>
+          <div v-else class="card card--type-padded text text--mt-2">
+            <h2>Scheduled for cancelation</h2>
+            <p>
+              This subscription will be cancelled on
+              {{
+                new Date(
+                  agastyaApiKey.subscription.cancel_at * 1000
+                ).toLocaleDateString()
+              }}.
+            </p>
+            <button class="button button--color-success" @click="revertCancel">
+              Revert cancelation
+            </button>
+          </div>
+        </div>
+        <div v-else>
+          <p>
+            You have a custom paid subscription. If you want to make any changes
+            to it, you'll have to contact someone from our team.
+          </p>
+        </div>
+      </div>
+      <div v-else>
+        <p>
+          You're currently on the <strong>Free plan</strong>. You can choose a
+          paid subscription below.
+        </p>
+        <form
+          v-if="pricingPlans"
+          v-meta-ctrl-enter="createSubscription"
+          @submit.prevent="createSubscription"
+        >
+          <div
+            v-for="(plan, index) in pricingPlans.data"
+            :key="`${plan.id}_${index}`"
+            class="fake-radio-container"
+          >
+            <label>
+              <input v-model="newPlan" type="radio" :value="plan.id" required />
+              <span class="fake-radio" role="radio" tabindex="0" />
+              <strong class="name">{{ plan.nickname }}</strong>
+              <span class="amount">
+                {{ (plan.currency || "eur").toUpperCase() }}
+                {{ plan.amount | currency }}
+              </span>
+              <span class="interval">
+                {{
+                  plan.interval_count == 1
+                    ? "per"
+                    : `per ${plan.interval_count}`
+                }}
+                {{ plan.interval }}
+              </span>
+            </label>
+          </div>
+          <button class="button">Create subscription</button>
+        </form>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -334,12 +435,17 @@ const agastyaCustomCssKeys = {};
     Checkbox,
     KeyValueList
   },
-  middleware: "auth"
+  middleware: "auth",
+  computed: mapGetters({
+    pricingPlans: "manage/pricingPlans"
+  })
 })
 export default class ManageSettings extends Vue {
   agastyaModes = agastyaModes;
   showDelete = false;
+  pricingPlans!: any;
   loading = "";
+  noBilling = false;
   repeatEvery = {
     0: "Hourly",
     1: "Daily",
@@ -349,6 +455,7 @@ export default class ManageSettings extends Vue {
   agastyaApiKey: AgastyaApiKey | null = null;
   agastyaCustomCssKeys = agastyaCustomCssKeys;
   integrations = integrations;
+  newPlan = "";
   agastyaBlocks = [
     {
       type: "mode-card",
@@ -596,6 +703,12 @@ export default class ManageSettings extends Vue {
       .then(agastyaApiKey => {
         this.agastyaApiKey = { ...agastyaApiKey };
       })
+      .then(() =>
+        this.$store.dispatch("manage/getPricingPlans", this.$route.params.team)
+      )
+      .then(plans => {
+        this.newPlan = this.pricingPlans.data[0].id;
+      })
       .catch(error => {
         throw new Error(error);
       })
@@ -617,6 +730,33 @@ export default class ManageSettings extends Vue {
       }
       this.agastyaApiKey = { ...agastyaApiKey };
     }
+  }
+  private cancelSubscription() {
+    if (!this.agastyaApiKey || !this.agastyaApiKey.subscriptionId) return;
+    this.loading = "Canceling your subscription";
+    this.$store
+      .dispatch("manage/cancelAgastyaSubscription", {
+        team: this.$route.params.team,
+        id: this.$route.params.key
+      })
+      .then(() => this.load())
+      .catch(() => {})
+      .finally(() => (this.loading = ""));
+  }
+
+  private createSubscription() {
+    this.loading = "Creating your subscription";
+    this.$store
+      .dispatch("manage/createAgastyaSubscription", {
+        team: this.$route.params.team,
+        plan: this.newPlan,
+        id: this.$route.params.key
+      })
+      .then(() => this.load())
+      .catch(error => {
+        if (error.response.data.error === "no-customer") this.noBilling = true;
+      })
+      .finally(() => (this.loading = ""));
   }
 
   get contrast() {
@@ -655,6 +795,19 @@ export default class ManageSettings extends Vue {
         isAccessible: false
       };
     }
+  }
+
+  private revertCancel() {
+    this.showDelete = false;
+    this.loading = "Saving your subscription";
+    this.$store
+      .dispatch("manage/revertAgastyaSubscription", {
+        team: this.$route.params.team,
+        id: this.$route.params.key
+      })
+      .then(subscription => this.load())
+      .catch(() => {})
+      .finally(() => (this.loading = ""));
   }
 
   private updateAgastyaApiKey() {
