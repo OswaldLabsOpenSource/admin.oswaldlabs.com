@@ -237,7 +237,7 @@ export default {
     "night": "Night mode",
     "large-font": "Large font",
     "legible-fonts": "Legible fonts",
-    "keyboard-nav": "Keyboard navigation",
+    "keyboard-navigation": "Keyboard nav",
     "highlight-links": "Highlight Links",
     "big-cursor": "Big cursor",
     "desaturate": "Desaturate",
