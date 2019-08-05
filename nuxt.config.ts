@@ -38,7 +38,7 @@ const config: NuxtConfiguration = {
       },
       {
         type: "text/javascript",
-        src: "https://platform.oswaldlabs.com/_/d1b9d3cd29.js",
+        src: "https://platform.oswaldlabs.com/_/agastya-admin.js",
         async: true
       }
     ]
