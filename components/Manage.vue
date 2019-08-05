@@ -5,10 +5,6 @@
   >
     <aside>
       <nav>
-        <nuxt-link class="item" :to="`/manage/${$route.params.team}/settings`">
-          <font-awesome-icon class="nav-icon" icon="cog" fixed-width />
-          <span>Settings</span>
-        </nuxt-link>
         <nuxt-link class="item" :to="`/manage/${$route.params.team}/agastya`">
           <font-awesome-icon
             class="nav-icon"
@@ -64,12 +60,6 @@
             :to="`/manage/${$route.params.team}/billing/details`"
           >
             <span>Details</span>
-          </nuxt-link>
-          <nuxt-link
-            class="sub-item"
-            :to="`/manage/${$route.params.team}/billing/subscription`"
-          >
-            <span>Subscription</span>
           </nuxt-link>
           <nuxt-link
             class="sub-item"

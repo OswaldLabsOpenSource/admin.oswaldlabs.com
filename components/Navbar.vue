@@ -16,6 +16,17 @@
           :to="`/dashboard/${activeOrganization}`"
           >Dashboard</nuxt-link
         >
+        <nuxt-link v-else class="item" to="/dashboard">Dashboard</nuxt-link>
+        <nuxt-link
+          v-if="
+            activeOrganization &&
+              activeOrganization !== 'undefined' &&
+              loggedInMembership !== 4
+          "
+          class="item"
+          :to="`/manage/${activeOrganization}/agastya`"
+          >Agastya</nuxt-link
+        >
         <nuxt-link
           v-if="
             activeOrganization &&
@@ -26,7 +37,6 @@
           :to="`/dashboard/${activeOrganization}/audit-webpages`"
           >Audits</nuxt-link
         >
-        <nuxt-link v-else class="item" to="/dashboard">Dashboard</nuxt-link>
         <nuxt-link
           v-if="
             activeOrganization &&
@@ -34,7 +44,7 @@
               loggedInMembership !== 4
           "
           class="item"
-          :to="`/manage/${activeOrganization}/settings`"
+          :to="`/manage/${activeOrganization}/team/settings`"
           >Settings</nuxt-link
         >
         <span>

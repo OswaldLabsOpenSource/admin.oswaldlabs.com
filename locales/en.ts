@@ -106,9 +106,6 @@ export default {
     languageDetect: {
       text: "Detect language API"
     },
-    screenshot: {
-      text: "Webpage screenshot API"
-    },
     readAloud: {
       text: "Read Aloud audio API"
     },
@@ -117,6 +114,9 @@ export default {
     },
     describe: {
       text: "Describe image API"
+    },
+    ocr: {
+      text: "OCR image API"
     },
     collect: {
       text: "Collect data",
