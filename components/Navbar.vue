@@ -17,7 +17,11 @@
           >Dashboard</nuxt-link
         >
         <nuxt-link
-          v-if="activeOrganization && activeOrganization !== 'undefined'"
+          v-if="
+            activeOrganization &&
+              activeOrganization !== 'undefined' &&
+              loggedInMembership !== 4
+          "
           class="item"
           :to="`/dashboard/${activeOrganization}/audit-webpages`"
           >Audits</nuxt-link

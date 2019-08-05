@@ -27,17 +27,35 @@
         <nuxt-link
           v-if="loggedInMembership !== 4"
           class="item"
-          :to="`/manage/${$route.params.team}/members`"
+          :to="`/manage/${$route.params.team}/team/members`"
         >
           <font-awesome-icon class="nav-icon" icon="users" fixed-width />
           <span>Team</span>
         </nuxt-link>
+        <nav v-if="$route.path.includes('/team/')" class="sub-nav">
+          <nuxt-link
+            class="sub-item"
+            :to="`/manage/${$route.params.team}/team/members`"
+          >
+            <span>Members</span>
+          </nuxt-link>
+          <nuxt-link
+            class="sub-item"
+            :to="`/manage/${$route.params.team}/team/settings`"
+          >
+            <span>Settings</span>
+          </nuxt-link>
+        </nav>
         <nuxt-link
           v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
           class="item item--type-parent"
           :to="`/manage/${$route.params.team}/billing/details`"
         >
-          <font-awesome-icon class="nav-icon" icon="address-card" fixed-width />
+          <font-awesome-icon
+            class="nav-icon"
+            icon="money-bill-wave"
+            fixed-width
+          />
           <span>Billing</span>
         </nuxt-link>
         <nav v-if="$route.path.includes('/billing/')" class="sub-nav">
@@ -45,7 +63,13 @@
             class="sub-item"
             :to="`/manage/${$route.params.team}/billing/details`"
           >
-            <span>Customer info</span>
+            <span>Details</span>
+          </nuxt-link>
+          <nuxt-link
+            class="sub-item"
+            :to="`/manage/${$route.params.team}/billing/subscription`"
+          >
+            <span>Subscription</span>
           </nuxt-link>
           <nuxt-link
             class="sub-item"
@@ -84,6 +108,12 @@
           >
             <span>Webhooks</span>
           </nuxt-link>
+          <nuxt-link
+            class="sub-item"
+            :to="`/manage/${$route.params.team}/developer/logs`"
+          >
+            <span>API logs</span>
+          </nuxt-link>
         </nav>
       </nav>
     </aside>
@@ -105,9 +135,10 @@ import {
   faBoxOpen,
   faUser,
   faAddressCard,
-  faCode,
   faHistory,
-  faUniversalAccess
+  faUniversalAccess,
+  faMoneyBillWave,
+  faCode
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
   faDatabase,
@@ -118,7 +149,8 @@ library.add(
   faCode,
   faAddressCard,
   faHistory,
-  faUniversalAccess
+  faUniversalAccess,
+  faMoneyBillWave
 );
 
 @Component({

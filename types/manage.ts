@@ -35,7 +35,8 @@ export interface Audit extends IdRow {
   scorePwa: number;
 }
 
-export interface Domain extends IdRow {
+export type ApiKeyLogs = any;
+export interface Domain extends Row {
   domain: string;
   verificationCode: string;
   isVerified: boolean;
@@ -194,6 +195,11 @@ export interface SingleAuditKV {
   }
 }
 
+export interface SingleApiKeyLogsKV {
+  [index: string]: {
+    [index: string]: ApiKeyLogs;
+  };
+}
 export interface SingleDomainKV {
   [index: string]: {
     [index: string]: Domain;
@@ -231,6 +237,7 @@ export interface RootState {
   auditWebpage: SingleAuditWebpageKV;
   audits: AuditsKV;
   audit: SingleAuditKV;
+  apiKeyLogs: SingleApiKeyLogsKV;
   domains: DomainsKV;
   domain: SingleDomainKV;
   webhooks: WebhooksKV;

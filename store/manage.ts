@@ -26,7 +26,8 @@ export const state = (): RootState => ({
   webhooks: {},
   webhook: {},
   agastyaApiKeys: {},
-  agastyaApiKey: {}
+  agastyaApiKey: {},
+  apiKeyLogs: {}
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -141,6 +142,20 @@ export const mutations: MutationTree<RootState> = {
     currentApiKeys[team] = currentApiKeys[team] || {};
     currentApiKeys[team][id] = { ...apiKey };
     Vue.set(state, "apiKey", currentApiKeys);
+  },
+  setApiKeyLogs(state: RootState, { team, apiKeyLogs, id, from }): void {
+    const currentApiKeyLogs = state.apiKeyLogs;
+    currentApiKeyLogs[team] = currentApiKeyLogs[team] || {};
+    currentApiKeyLogs[team][id] = currentApiKeyLogs[team][id] || emptyPagination;
+    if (from) {
+      currentApiKeyLogs[team][id].data = [
+        ...currentApiKeyLogs[team][id].data,
+        ...apiKeyLogs.data
+      ];
+    } else {
+      currentApiKeyLogs[team][id] = { ...apiKeyLogs };
+    }
+    Vue.set(state, "apiKeyLogs", currentApiKeyLogs);
   },
   setDomains(state: RootState, { team, domains, start, next }): void {
     const currentDomains = state.domains;
@@ -462,6 +477,13 @@ export const actions: ActionTree<RootState, RootState> = {
     commit("setApiKey", { team, apiKey, id });
     return apiKey;
   },
+  async getApiKeyLogs({ commit }, { team, id, range, from }) {
+    const apiKeyLogs: any = (await this.$axios.get(
+      `/organizations/${team}/api-keys/${id}/logs?range=${range}&from=${from}`
+    )).data;
+    commit("setApiKeyLogs", { team, apiKeyLogs, range, id, from });
+    return apiKeyLogs;
+  },
   async createApiKey({ dispatch }, context) {
     const data = { ...context };
     delete data.team;
@@ -697,5 +719,7 @@ export const getters: GetterTree<RootState, RootState> = {
   agastyaApiKeys: state => (team: string) => (state.agastyaApiKeys)[team],
   agastyaApiKey: state => (team: string, agastyaApiKey: string) =>
     state.agastyaApiKey[team] && state.agastyaApiKey[team][agastyaApiKey],
+  apiKeyLogs: state => (team: string, apiKeyLogs: string) =>
+    state.apiKeyLogs[team] && state.apiKeyLogs[team][apiKeyLogs],
   organization: state => (team: string) => (state.organizations)[team]
 };
