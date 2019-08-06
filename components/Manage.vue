@@ -21,8 +21,7 @@
           <span>Audits</span>
         </nuxt-link>
         <nuxt-link
-          v-if="loggedInMembership !== 4"
-          class="item"
+          class="item item--type-parent"
           :to="`/manage/${$route.params.team}/team/members`"
         >
           <font-awesome-icon class="nav-icon" icon="users" fixed-width />
@@ -43,7 +42,6 @@
           </nuxt-link>
         </nav>
         <nuxt-link
-          v-if="loggedInMembership !== 3 && loggedInMembership !== 4"
           class="item item--type-parent"
           :to="`/manage/${$route.params.team}/billing/details`"
         >

@@ -13,6 +13,7 @@ export interface Membership extends IdRow {
   organization: Organization;
 }
 export interface ApiKey extends IdRow {
+  name?: string;
   jwtApiKey: string;
   scopes: string;
   ipRestrictions?: string;
@@ -240,10 +241,10 @@ export interface RootState {
   apiKeyLogs: SingleApiKeyLogsKV;
   domains: DomainsKV;
   domain: SingleDomainKV;
-  webhooks: WebhooksKV;
-  webhook: SingleWebhookKV;
   agastyaApiKeys: WebhooksKV;
   agastyaApiKey: SingleAgastyaApiKeyKV;
+  devWebhooks: WebhooksKV;
+  devWebhook: SingleWebhookKV;
   pricingPlans?: any;
   recentEvents?: any;
   isDownloading: boolean;
