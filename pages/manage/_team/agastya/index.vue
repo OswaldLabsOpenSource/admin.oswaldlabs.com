@@ -65,6 +65,20 @@
                     fixed-width
                   />
                 </router-link>
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${agastyaApiKey.id}`
+                  "
+                  aria-label="Analytics"
+                  data-balloon-pos="up"
+                  class="button button--type-icon"
+                >
+                  <font-awesome-icon
+                    class="icon"
+                    icon="chart-line"
+                    fixed-width
+                  />
+                </router-link>
                 <button
                   aria-label="Delete"
                   data-balloon-pos="up"
@@ -146,7 +160,8 @@ import {
   faPencilAlt,
   faArrowDown,
   faSync,
-  faTrash
+  faTrash,
+  faChartLine
 } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/components/Loading.vue";
 import Confirm from "@/components/Confirm.vue";
@@ -158,7 +173,7 @@ import Checkbox from "@/components/form/Checkbox.vue";
 import Select from "@/components/form/Select.vue";
 import { User } from "@/types/auth";
 import { AgastyaApiKeys, emptyPagination, AgastyaApiKey } from "@/types/manage";
-library.add(faPencilAlt, faArrowDown, faSync, faTrash);
+library.add(faPencilAlt, faArrowDown, faSync, faTrash, faChartLine);
 
 @Component({
   components: {

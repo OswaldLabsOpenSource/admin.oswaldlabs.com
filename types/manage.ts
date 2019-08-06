@@ -37,6 +37,7 @@ export interface Audit extends IdRow {
 }
 
 export type ApiKeyLogs = any;
+export type AgastyaApiKeyLogs = any;
 export interface Domain extends Row {
   domain: string;
   verificationCode: string;
@@ -201,6 +202,11 @@ export interface SingleApiKeyLogsKV {
     [index: string]: ApiKeyLogs;
   };
 }
+export interface SingleAgastyaApiKeyLogsKV {
+  [index: string]: {
+    [index: string]: AgastyaApiKeyLogs;
+  };
+}
 export interface SingleDomainKV {
   [index: string]: {
     [index: string]: Domain;
@@ -243,6 +249,7 @@ export interface RootState {
   domain: SingleDomainKV;
   agastyaApiKeys: WebhooksKV;
   agastyaApiKey: SingleAgastyaApiKeyKV;
+  agastyaApiKeyLogs: SingleAgastyaApiKeyLogsKV;
   devWebhooks: WebhooksKV;
   devWebhook: SingleWebhookKV;
   pricingPlans?: any;

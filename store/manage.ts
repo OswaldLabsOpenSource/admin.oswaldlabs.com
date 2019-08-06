@@ -25,6 +25,7 @@ export const state = (): RootState => ({
   domain: {},
   agastyaApiKeys: {},
   agastyaApiKey: {},
+  agastyaApiKeyLogs: {},
   devWebhooks: {},
   devWebhook: {},
   apiKeyLogs: {}
@@ -157,6 +158,20 @@ export const mutations: MutationTree<RootState> = {
     }
     Vue.set(state, "apiKeyLogs", currentApiKeyLogs);
   },
+  setAgastyaApiKeyLogs(state: RootState, { team, agastyaApiKeyLogs, id, from }): void {
+    const currentAgastyaApiKeyLogs = { ...state.agastyaApiKeyLogs };
+    currentAgastyaApiKeyLogs[team] = currentAgastyaApiKeyLogs[team] || {};
+    currentAgastyaApiKeyLogs[team][id] = currentAgastyaApiKeyLogs[team][id] || emptyPagination;
+    if (from) {
+      currentAgastyaApiKeyLogs[team][id].data = [
+        ...currentAgastyaApiKeyLogs[team][id].data,
+        ...agastyaApiKeyLogs.data
+      ];
+    } else {
+      currentAgastyaApiKeyLogs[team][id] = { ...agastyaApiKeyLogs };
+    }
+    Vue.set(state, "agastyaApiKeyLogs", currentAgastyaApiKeyLogs);
+  },
   setDomains(state: RootState, { team, domains, start, next }): void {
     const currentDomains = { ...state.domains };
     currentDomains[team] = currentDomains[team] || emptyPagination;
@@ -285,6 +300,7 @@ export const mutations: MutationTree<RootState> = {
     currentState.devWebhook = {};
     currentState.agastyaApiKeys = {};
     currentState.agastyaApiKey = {};
+    currentState.agastyaApiKeyLogs = {};
     currentState.auditWebpages = {};
     currentState.auditWebpage = {};
     state = currentState;
@@ -404,6 +420,13 @@ export const actions: ActionTree<RootState, RootState> = {
       `/organizations/${context.team}/agastya-api-keys/${context.id}/subscription`
     );
     return dispatch("getAgastyaApiKey", { team: context.team, id: context.id });
+  },
+  async getAgastyaApiKeyLogs({ commit }, context) {
+    const agastyaApiKeyLogs: any = (await this.$axios.get(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}/logs?range=${context.range}&from=${context.from}`
+    )).data;
+    commit("setAgastyaApiKeyLogs", { team: context.team, agastyaApiKeyLogs, range: context.range, id: context.id, from: context.from });
+    return agastyaApiKeyLogs;
   },
   async editSubscription({ dispatch }, context) {
     const data = { ...context };
@@ -721,6 +744,8 @@ export const getters: GetterTree<RootState, RootState> = {
   agastyaApiKeys: state => (team: string) => (state.agastyaApiKeys)[team],
   agastyaApiKey: state => (team: string, agastyaApiKey: string) =>
     state.agastyaApiKey[team] && state.agastyaApiKey[team][agastyaApiKey],
+  agastyaApiKeyLogs: state => (team: string, agastyaApiKeyLogs: string) =>
+    state.agastyaApiKeyLogs[team] && state.agastyaApiKeyLogs[team][agastyaApiKeyLogs],
   apiKeyLogs: state => (team: string, apiKeyLogs: string) =>
     state.apiKeyLogs[team] && state.apiKeyLogs[team][apiKeyLogs],
   organization: state => (team: string) => (state.organizations)[team]

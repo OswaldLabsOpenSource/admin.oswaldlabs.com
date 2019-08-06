@@ -5,8 +5,10 @@
       :style="
         `background-image: url('https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/${code.toLowerCase()}.svg')`
       "
+      :aria-label="text ? name : undefined"
+      data-balloon-pos="up"
     ></div>
-    <div>{{ name }}</div>
+    <div>{{ text || name }}</div>
   </div>
 </template>
 
@@ -18,6 +20,7 @@ const countries = getAllCountries();
 @Component({})
 export default class Country extends Vue {
   @Prop({ default: "" }) code;
+  @Prop({ default: "" }) text;
 
   get name() {
     return (
