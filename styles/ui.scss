@@ -545,3 +545,8 @@ code, .input.input--font-monospace {
 .fa-spin {
   animation-duration: 1.5s !important;
 }
+
+.loading {
+  opacity: 0.5;
+  transition: 1s;
+}

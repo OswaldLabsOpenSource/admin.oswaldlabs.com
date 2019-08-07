@@ -153,6 +153,7 @@ export const mutations: MutationTree<RootState> = {
         ...currentApiKeyLogs[team][id].data,
         ...apiKeyLogs.data
       ];
+      currentApiKeyLogs[team][id].hasMore = apiKeyLogs.hasMore;
     } else {
       currentApiKeyLogs[team][id] = { ...apiKeyLogs };
     }
@@ -167,6 +168,7 @@ export const mutations: MutationTree<RootState> = {
         ...currentAgastyaApiKeyLogs[team][id].data,
         ...agastyaApiKeyLogs.data
       ];
+      currentAgastyaApiKeyLogs[team][id].hasMore = agastyaApiKeyLogs.hasMore;
     } else {
       currentAgastyaApiKeyLogs[team][id] = { ...agastyaApiKeyLogs };
     }

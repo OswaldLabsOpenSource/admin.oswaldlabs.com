@@ -32,7 +32,9 @@ export const removeReadOnlyValues = (value: any) => {
           "stripeCustomerId",
           "updatedAt",
           "twoFactorEnabled",
-          "lastFiredAt"
+          "lastFiredAt",
+          "eventsConsumed",
+          "eventsUpdatedAt"
         ].includes(key)
       ) {
         delete value[key];

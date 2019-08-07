@@ -32,7 +32,7 @@
               <div
                 style="display: flex; margin-bottom: 1rem; margin-top: 2rem;"
               >
-                <button class="button">Load API logs</button>
+                <button class="button">Load analytics</button>
               </div>
             </div>
           </form>
@@ -43,7 +43,18 @@
               img="undraw_software_engineer_lvl5.svg"
               text="We couldn't find any API logs for this API key yet, go ahead and make some requests first"
             />
-            <div v-else-if="data && data.data && data.data.length">
+            <div
+              v-else-if="data && data.data && data.data.length"
+              :class="{ loading }"
+            >
+              <div class="row text text--mb-2">
+                <div v-if="data.count">
+                  <div class="text text--size-250">
+                    {{ data.count | number }}
+                  </div>
+                  <div>total events</div>
+                </div>
+              </div>
               <table class="table">
                 <thead>
                   <tr>
@@ -75,11 +86,11 @@
                       />
                     </td>
                     <td v-if="log._source && log._source.action">
-                      {{ log._source.action | kebabSentence }}
+                      {{ log._source.action | kebabSentence | shortText }}
                     </td>
                     <td v-else><em>No action</em></td>
                     <td v-if="log._source && log._source.event">
-                      {{ log._source.event | kebabSentence }}
+                      {{ log._source.event | kebabSentence | shortText }}
                     </td>
                     <td v-else><em>No event</em></td>
                     <td>
