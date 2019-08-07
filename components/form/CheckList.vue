@@ -113,6 +113,8 @@ export default class CommaList extends Vue {
   display: flex;
   flex-wrap: wrap;
   margin-top: 1rem;
+  max-height: 20rem;
+  overflow: auto;
   .checklist-item {
     width: 300px;
   }

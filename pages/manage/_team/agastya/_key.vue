@@ -215,6 +215,15 @@
             @input="val => updateValue('variables', 'readAloudLanguage', val)"
           />
         </div>
+        <h3>Translation</h3>
+        <div v-if="agastyaApiKey.variables" class="row">
+          <CheckList
+            :value="agastyaApiKey.variables.translateLanguages || ''"
+            label="Translate languages"
+            :options="translateLanguages"
+            @input="val => updateValue('variables', 'translateLanguages', val)"
+          />
+        </div>
         <button class="button">Update Agastya API key</button>
         <button
           type="button"
@@ -377,6 +386,7 @@ import Input from "@/components/form/Input.vue";
 import Blocks from "@/components/form/Blocks.vue";
 import ColorInput from "@/components/form/ColorInput.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
+import CheckList from "@/components/form/CheckList.vue";
 import Select from "@/components/form/Select.vue";
 import { User } from "@/types/auth";
 import en from "@/locales/en";
@@ -433,6 +443,7 @@ const agastyaCustomCssKeys = {};
     Integrations,
     LargeMessage,
     Checkbox,
+    CheckList,
     KeyValueList
   },
   middleware: "auth",
@@ -593,6 +604,112 @@ export default class ManageSettings extends Vue {
     sv: "Slovak",
     tr: "Turkish",
     cy: "Welsh"
+  };
+  translateLanguages = {
+    af: { text: "Afrikaans" },
+    sq: { text: "Albanian" },
+    am: { text: "Amharic" },
+    ar: { text: "Arabic" },
+    hy: { text: "Armenian" },
+    az: { text: "Azerbaijani" },
+    eu: { text: "Basque" },
+    be: { text: "Belarusian" },
+    bn: { text: "Bengali" },
+    bs: { text: "Bosnian" },
+    bg: { text: "Bulgarian" },
+    ca: { text: "Catalan" },
+    ceb: { text: "Cebuano" },
+    "zh-CN": { text: "Chinese (Simplified)" },
+    "zh-TW": { text: "Chinese (Traditional)" },
+    co: { text: "Corsican" },
+    hr: { text: "Croatian" },
+    cs: { text: "Czech" },
+    da: { text: "Danish" },
+    nl: { text: "Dutch" },
+    en: { text: "English" },
+    eo: { text: "Esperanto" },
+    et: { text: "Estonian" },
+    fi: { text: "Finnish" },
+    fr: { text: "French" },
+    fy: { text: "Frisian" },
+    gl: { text: "Galician" },
+    ka: { text: "Georgian" },
+    de: { text: "German" },
+    el: { text: "Greek" },
+    gu: { text: "Gujarati" },
+    ht: { text: "Haitian Creole" },
+    ha: { text: "Hausa" },
+    haw: { text: "Hawaiian" },
+    he: { text: "Hebrew" },
+    hi: { text: "Hindi" },
+    hmn: { text: "Hmong" },
+    hu: { text: "Hungarian" },
+    is: { text: "Icelandic" },
+    ig: { text: "Igbo" },
+    id: { text: "Indonesian" },
+    ga: { text: "Irish" },
+    it: { text: "Italian" },
+    ja: { text: "Japanese" },
+    jw: { text: "Javanese" },
+    kn: { text: "Kannada" },
+    kk: { text: "Kazakh" },
+    km: { text: "Khmer" },
+    ko: { text: "Korean" },
+    ku: { text: "Kurdish" },
+    ky: { text: "Kyrgyz" },
+    lo: { text: "Lao" },
+    la: { text: "Latin" },
+    lv: { text: "Latvian" },
+    lt: { text: "Lithuanian" },
+    lb: { text: "Luxembourgish" },
+    mk: { text: "Macedonian" },
+    mg: { text: "Malagasy" },
+    ms: { text: "Malay" },
+    ml: { text: "Malayalam" },
+    mt: { text: "Maltese" },
+    mi: { text: "Maori" },
+    mr: { text: "Marathi" },
+    mn: { text: "Mongolian" },
+    my: { text: "Myanmar (Burmese)" },
+    ne: { text: "Nepali" },
+    no: { text: "Norwegian" },
+    ny: { text: "Nyanja (Chichewa)" },
+    ps: { text: "Pashto" },
+    fa: { text: "Persian" },
+    pl: { text: "Polish" },
+    pt: { text: "Portuguese" },
+    pa: { text: "Punjabi" },
+    ro: { text: "Romanian" },
+    ru: { text: "Russian" },
+    sm: { text: "Samoan" },
+    gd: { text: "Scots Gaelic" },
+    sr: { text: "Serbian" },
+    st: { text: "Sesotho" },
+    sn: { text: "Shona" },
+    sd: { text: "Sindhi" },
+    si: { text: "Sinhala (Sinhalese)" },
+    sk: { text: "Slovak" },
+    sl: { text: "Slovenian" },
+    so: { text: "Somali" },
+    es: { text: "Spanish" },
+    su: { text: "Sundanese" },
+    sw: { text: "Swahili" },
+    sv: { text: "Swedish" },
+    tl: { text: "Tagalog (Filipino)" },
+    tg: { text: "Tajik" },
+    ta: { text: "Tamil" },
+    te: { text: "Telugu" },
+    th: { text: "Thai" },
+    tr: { text: "Turkish" },
+    uk: { text: "Ukrainian" },
+    ur: { text: "Urdu" },
+    uz: { text: "Uzbek" },
+    vi: { text: "Vietnamese" },
+    cy: { text: "Welsh" },
+    xh: { text: "Xhosa" },
+    yi: { text: "Yiddish" },
+    yo: { text: "Yoruba" },
+    zu: { text: "Zulu" }
   };
   private created() {
     this.agastyaApiKey = {
