@@ -104,7 +104,6 @@
       </div>
       <Loading v-else-if="loading" :message="loading" />
       <h2>Add card</h2>
-      <p>You can use <code>42</code> 16 times as a test credit card.</p>
       <form @submit.prevent="addCard">
         <div class="row">
           <Input
