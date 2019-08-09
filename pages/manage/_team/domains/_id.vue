@@ -66,10 +66,10 @@
                 You should be able to access the file:
                 <a
                   :href="
-                    `http://${domain.domain}/.well-known/staart-verify.txt`
+                    `http://${domain.domain}/.well-known/oswaldlabsplatform-verify.txt`
                   "
                   target="_blank"
-                  >http://{{ domain.domain }}/.well-known/staart-verify.txt</a
+                  >http://{{ domain.domain }}/.well-known/oswaldlabsplatform-verify.txt</a
                 >
               </li>
               <li>
@@ -200,7 +200,7 @@ export default class ManageMembers extends Vue {
 
   private download() {
     if (!this.domain) return;
-    download(this.domain.verificationCode, "staart-verify.txt", "text/plain");
+    download(this.domain.verificationCode, "oswaldlabsplatform-verify.txt", "text/plain");
   }
 
   private verifyDomain() {
