@@ -69,7 +69,9 @@
                     `http://${domain.domain}/.well-known/oswaldlabsplatform-verify.txt`
                   "
                   target="_blank"
-                  >http://{{ domain.domain }}/.well-known/oswaldlabsplatform-verify.txt</a
+                  >http://{{
+                    domain.domain
+                  }}/.well-known/oswaldlabsplatform-verify.txt</a
                 >
               </li>
               <li>
@@ -200,7 +202,11 @@ export default class ManageMembers extends Vue {
 
   private download() {
     if (!this.domain) return;
-    download(this.domain.verificationCode, "oswaldlabsplatform-verify.txt", "text/plain");
+    download(
+      this.domain.verificationCode,
+      "oswaldlabsplatform-verify.txt",
+      "text/plain"
+    );
   }
 
   private verifyDomain() {

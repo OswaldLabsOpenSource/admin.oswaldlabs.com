@@ -516,6 +516,7 @@ nav .item.item--type-less:hover {
   margin-top: -0.25rem;
   margin-right: 0.5rem;
   vertical-align: middle;
+}
 .subheading {
   display: block;
   padding-left: 1.5rem;
