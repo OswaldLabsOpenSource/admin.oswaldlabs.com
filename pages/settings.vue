@@ -32,11 +32,11 @@ export default class Dashboard extends Vue {
               memberships.data[0].organization.username
             ) {
               this.$router.replace(
-                `/settings/${memberships.data[0].organization.username}`
+                `/manage/${memberships.data[0].organization.username}/agastya`
               );
             } else {
               this.$router.replace(
-                `/settings/${memberships.data[0].organizationId}`
+                `/manage/${memberships.data[0].organizationId}/agastya`
               );
             }
           } else {
