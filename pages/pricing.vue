@@ -57,7 +57,7 @@
               <link itemprop="availability" href="https://schema.org/InStock" />
             </div>
             <div class="text text--size-small text--color-light">
-              per {{ selectedTerm === "annually" ? "year" : "month" }}
+              per month
             </div>
             <div class="text text--size-small text--color-light">
               billed {{ selectedTerm }}
@@ -322,7 +322,7 @@ library.add(faCheck, faTimes, faArrowRight);
 })
 export default class Pricing extends Vue {
   selectedCurrency = "usd";
-  selectedTerm = "monthly";
+  selectedTerm = "annually";
   proPrices = {
     monthly: {
       usd: 15000,
@@ -330,9 +330,9 @@ export default class Pricing extends Vue {
       inr: 1200000
     },
     annually: {
-      usd: 150000,
-      eur: 130000,
-      inr: 12000000
+      usd: 12500,
+      eur: 11000,
+      inr: 1000000
     }
   };
   currencySymbols = {
@@ -347,6 +347,7 @@ export default class Pricing extends Vue {
         "5 users included",
         "Unlimited users"
       ],
+      "Extra members": ["$10/user/month", "$25/user/month", "No extra charge"],
       "IP whitelisting": [
         "Whitelist IP/CIDRs",
         "Whitelist IP/CIDRs",

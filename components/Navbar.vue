@@ -20,27 +20,7 @@
         <nuxt-link
           v-if="activeOrganization"
           class="item"
-          :to="`/manage/${activeOrganization}/agastya`"
-          >Agastya</nuxt-link
-        >
-        <nuxt-link
-          v-if="
-            activeOrganization &&
-              activeOrganization !== 'undefined' &&
-              loggedInMembership !== 4
-          "
-          class="item"
-          :to="`/dashboard/${activeOrganization}/audit-webpages`"
-          >Audits</nuxt-link
-        >
-        <nuxt-link
-          v-if="
-            activeOrganization &&
-              activeOrganization !== 'undefined' &&
-              loggedInMembership !== 4
-          "
-          class="item"
-          :to="`/manage/${activeOrganization}/team/settings`"
+          :to="`/manage/${activeOrganization}/settings`"
           >Settings</nuxt-link
         >
         <nuxt-link v-else class="item" to="/settings">Settings</nuxt-link>
@@ -158,8 +138,12 @@
           </transition>
         </span>
       </nav>
-      <nav v-else>
-        <a href="https://oswaldlabs.com" class="item" to="/"
+      <nav v-else :class="{ 'nav--visible-true': showNav }">
+        <nuxt-link class="item" to="/pricing">Pricing</nuxt-link>
+        <a target="_blank" href="https://help.oswaldlabs.com" class="item"
+          >Help</a
+        >
+        <a target="_blank" href="https://oswaldlabs.com" class="item"
           >Oswald Labs Home</a
         >
         <nuxt-link
