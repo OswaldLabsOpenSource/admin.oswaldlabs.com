@@ -288,6 +288,17 @@ code, .input.input--font-monospace {
   + .pagination {
     margin-top: 1rem;
   }
+  &.table--type-data {
+    td, th {
+      &:first-child {
+        padding-right: 0;
+      }
+      &:last-child {
+        text-align: right;
+        padding-left: 0;
+      }
+    }
+  }
 }
 
 .card {

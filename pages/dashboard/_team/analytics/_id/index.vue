@@ -58,7 +58,7 @@
               <div class="row">
                 <div>
                   <h2>Countries</h2>
-                  <table class="table">
+                  <table class="table table--type-data">
                     <tbody>
                       <tr
                         v-for="(row, i) in aggregationCountryCode"
@@ -72,7 +72,7 @@
                 </div>
                 <div>
                   <h2>Browsers</h2>
-                  <table class="table">
+                  <table class="table table--type-data">
                     <tbody>
                       <tr
                         v-for="(row, i) in aggregationBrowserName"
@@ -86,7 +86,7 @@
                 </div>
                 <div>
                   <h2>Operating systems</h2>
-                  <table class="table">
+                  <table class="table table--type-data">
                     <tbody>
                       <tr
                         v-for="(row, i) in aggregationOSName"
@@ -98,15 +98,95 @@
                     </tbody>
                   </table>
                 </div>
+              </div>
+              <div class="row text text--mt-2">
                 <div>
                   <h2>Actions</h2>
-                  <table class="table">
+                  <table class="table table--type-data">
                     <tbody>
                       <tr
                         v-for="(row, i) in aggregationAction"
                         :key="`r${i}action`"
                       >
+                        <td>{{ row.key | kebabSentence | shortText }}</td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Events</h2>
+                  <table class="table table--type-data">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationEvent"
+                        :key="`r${i}action`"
+                      >
+                        <td>{{ row.key | eventName }}</td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Pages</h2>
+                  <table class="table table--type-data">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationUrl"
+                        :key="`r${i}action`"
+                      >
+                        <td class="less-pad">
+                          <input
+                            class="input input--font-monospace input--padding-condensed"
+                            :value="row.key"
+                            disabled
+                          />
+                        </td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row text text--mt-2">
+                <div>
+                  <h2>City</h2>
+                  <table class="table table--type-data">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationCity"
+                        :key="`r${i}action`"
+                      >
                         <td>{{ row.key }}</td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Devices</h2>
+                  <table class="table table--type-data">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationDevice"
+                        :key="`r${i}action`"
+                      >
+                        <td><IconText type="brand" :text="row.key" /></td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Referrers</h2>
+                  <table class="table table--type-data">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationReferrer"
+                        :key="`r${i}action`"
+                      >
+                        <td><IconText type="domain" :text="row.key" /></td>
                         <td>{{ row.doc_count }}</td>
                       </tr>
                     </tbody>
@@ -149,7 +229,7 @@
                     </td>
                     <td v-else><em>No action</em></td>
                     <td v-if="log._source && log._source.event">
-                      {{ log._source.event | kebabSentence | shortText }}
+                      {{ log._source.event | eventName }}
                     </td>
                     <td v-else><em>No event</em></td>
                     <td>
@@ -226,6 +306,16 @@ import LargeMessage from "@/components/LargeMessage.vue";
 import Loading from "@/components/Loading.vue";
 library.add(faEye, faArrowDown, faSync, faCloudDownloadAlt);
 
+function sharedStart(array: string[]) {
+  const A = array.concat().sort();
+  const a1 = A[0];
+  const a2 = A[A.length - 1];
+  const L = a1.length;
+  let i = 0;
+  while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
+  return a1.substring(0, i);
+}
+
 @Component({
   middleware: "auth",
   components: {
@@ -258,6 +348,11 @@ export default class Dashboard extends Vue {
   aggregationCountryCode: Aggregations[] = [];
   aggregationBrowserName: Aggregations[] = [];
   aggregationOSName: Aggregations[] = [];
+  aggregationReferrer: Aggregations[] = [];
+  aggregationEvent: Aggregations[] = [];
+  aggregationUrl: Aggregations[] = [];
+  aggregationCity: Aggregations[] = [];
+  aggregationDevice: Aggregations[] = [];
 
   private created() {
     this.data = {
@@ -292,6 +387,41 @@ export default class Dashboard extends Vue {
         this.$route.params.team,
         this.$route.params.id,
         "os_name"
+      )
+    };
+    this.aggregationReferrer = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "referrer_domain"
+      )
+    };
+    this.aggregationEvent = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "event"
+      )
+    };
+    this.aggregationUrl = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "url"
+      )
+    };
+    this.aggregationCity = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "city"
+      )
+    };
+    this.aggregationDevice = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "device_manufacturer"
       )
     };
   }
@@ -360,6 +490,66 @@ export default class Dashboard extends Vue {
       )
       .then(aggregationOSName => {
         this.aggregationOSName = aggregationOSName;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "referrer_domain"
+        })
+      )
+      .then(aggregationReferrer => {
+        this.aggregationReferrer = aggregationReferrer;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "event"
+        })
+      )
+      .then(aggregationEvent => {
+        this.aggregationEvent = aggregationEvent;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "url"
+        })
+      )
+      .then(aggregationUrl => {
+        this.aggregationUrl = aggregationUrl;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "city"
+        })
+      )
+      .then(aggregationCity => {
+        this.aggregationCity = aggregationCity;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "device_manufacturer"
+        })
+      )
+      .then(aggregationDevice => {
+        this.aggregationDevice = aggregationDevice;
       })
       .catch(error => {
         throw new Error(error);

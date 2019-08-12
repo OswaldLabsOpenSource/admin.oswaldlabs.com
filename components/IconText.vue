@@ -1,6 +1,10 @@
 <template>
   <div class="icon-text">
-    <div class="flag" :style="`background-image: url('${image}')`"></div>
+    <div
+      v-if="image"
+      class="flag"
+      :style="`background-image: url('${image}')`"
+    ></div>
     <div>{{ name }}</div>
   </div>
 </template>
@@ -12,8 +16,11 @@ import analyticsIcons from "analytics-icons";
 @Component({})
 export default class Country extends Vue {
   @Prop({ default: "" }) text;
+  @Prop({ default: "brand" }) type;
 
   get image() {
+    if (this.text === "" || this.text === "unknown") return;
+    if (this.type === "domain") return `https://unavatar.now.sh/${this.text}`;
     return analyticsIcons(this.text);
   }
 
