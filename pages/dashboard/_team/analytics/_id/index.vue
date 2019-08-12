@@ -55,6 +55,65 @@
                   <div>total events</div>
                 </div>
               </div>
+              <div class="row">
+                <div>
+                  <h2>Countries</h2>
+                  <table class="table">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationCountryCode"
+                        :key="`r${i}country`"
+                      >
+                        <td><Country :code="row.key" /></td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Browsers</h2>
+                  <table class="table">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationBrowserName"
+                        :key="`r${i}browser`"
+                      >
+                        <td><IconText type="browser" :text="row.key" /></td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Operating systems</h2>
+                  <table class="table">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationOSName"
+                        :key="`r${i}os`"
+                      >
+                        <td><IconText type="browser" :text="row.key" /></td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <h2>Actions</h2>
+                  <table class="table">
+                    <tbody>
+                      <tr
+                        v-for="(row, i) in aggregationAction"
+                        :key="`r${i}action`"
+                      >
+                        <td>{{ row.key }}</td>
+                        <td>{{ row.doc_count }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <h2>All events</h2>
               <table class="table">
                 <thead>
                   <tr>
@@ -155,11 +214,13 @@ import {
 import {
   emptyPagination,
   AgastyaApiKey,
+  Aggregations,
   AgastyaApiKeyLogs
 } from "@/types/manage";
 import Select from "@/components/form/Select.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
 import Country from "@/components/Country.vue";
+import IconText from "@/components/IconText.vue";
 import HTTPStatus from "@/components/HTTPStatus.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
 import Loading from "@/components/Loading.vue";
@@ -173,6 +234,7 @@ library.add(faEye, faArrowDown, faSync, faCloudDownloadAlt);
     Select,
     TimeAgo,
     HTTPStatus,
+    IconText,
     Country,
     FontAwesomeIcon
   }
@@ -192,11 +254,44 @@ export default class Dashboard extends Vue {
     "30d": "Last 30 days"
   };
 
+  aggregationAction: Aggregations[] = [];
+  aggregationCountryCode: Aggregations[] = [];
+  aggregationBrowserName: Aggregations[] = [];
+  aggregationOSName: Aggregations[] = [];
+
   private created() {
     this.data = {
       ...this.$store.getters["manage/agastyaApiKeyLogs"](
         this.$route.params.team,
         this.$route.params.id
+      )
+    };
+    this.aggregationAction = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "action"
+      )
+    };
+    this.aggregationCountryCode = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "country_code"
+      )
+    };
+    this.aggregationBrowserName = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "browser_name"
+      )
+    };
+    this.aggregationOSName = {
+      ...this.$store.getters["manage/agastyaApiKeyGraphs"](
+        this.$route.params.team,
+        this.$route.params.id,
+        "os_name"
       )
     };
   }
@@ -217,6 +312,54 @@ export default class Dashboard extends Vue {
       })
       .then(data => {
         this.data = data;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "action"
+        })
+      )
+      .then(aggregationAction => {
+        this.aggregationAction = aggregationAction;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "country_code"
+        })
+      )
+      .then(aggregationCountryCode => {
+        this.aggregationCountryCode = aggregationCountryCode;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "browser_name"
+        })
+      )
+      .then(aggregationBrowserName => {
+        this.aggregationBrowserName = aggregationBrowserName;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "os_name"
+        })
+      )
+      .then(aggregationOSName => {
+        this.aggregationOSName = aggregationOSName;
       })
       .catch(error => {
         throw new Error(error);

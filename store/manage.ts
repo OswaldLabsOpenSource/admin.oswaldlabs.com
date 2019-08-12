@@ -26,6 +26,7 @@ export const state = (): RootState => ({
   agastyaApiKeys: {},
   agastyaApiKey: {},
   agastyaApiKeyLogs: {},
+  agastyaApiKeyGraphs: {},
   devWebhooks: {},
   devWebhook: {},
   apiKeyLogs: {}
@@ -173,6 +174,22 @@ export const mutations: MutationTree<RootState> = {
       currentAgastyaApiKeyLogs[team][id] = { ...agastyaApiKeyLogs };
     }
     Vue.set(state, "agastyaApiKeyLogs", currentAgastyaApiKeyLogs);
+  },
+  setAgastyaApiKeyGraphs(state: RootState, { team, agastyaApiKeyGraphs, field, id, from }): void {
+    const currentAgastyaApiKeyGraphs = { ...state.agastyaApiKeyGraphs };
+    currentAgastyaApiKeyGraphs[team] = currentAgastyaApiKeyGraphs[team] || {};
+    currentAgastyaApiKeyGraphs[team][id] = currentAgastyaApiKeyGraphs[team][id] || {};
+    currentAgastyaApiKeyGraphs[team][id][field] = currentAgastyaApiKeyGraphs[team][id][field] || emptyPagination;
+    if (from) {
+      currentAgastyaApiKeyGraphs[team][id][field].data = [
+        ...currentAgastyaApiKeyGraphs[team][id][field].data,
+        ...agastyaApiKeyGraphs.data
+      ];
+      currentAgastyaApiKeyGraphs[team][id][field].hasMore = agastyaApiKeyGraphs.hasMore;
+    } else {
+      currentAgastyaApiKeyGraphs[team][id][field] = { ...agastyaApiKeyGraphs };
+    }
+    Vue.set(state, "agastyaApiKeyGraphs", currentAgastyaApiKeyGraphs);
   },
   setDomains(state: RootState, { team, domains, start, next }): void {
     const currentDomains = { ...state.domains };
@@ -429,6 +446,13 @@ export const actions: ActionTree<RootState, RootState> = {
     )).data;
     commit("setAgastyaApiKeyLogs", { team: context.team, agastyaApiKeyLogs, range: context.range, id: context.id, from: context.from });
     return agastyaApiKeyLogs;
+  },
+  async getAgastyaApiKeyGraphs({ commit }, context) {
+    const agastyaApiKeyGraphs: any = (await this.$axios.get(
+      `/organizations/${context.team}/agastya-api-keys/${context.id}/graphs/${context.field}?range=${context.range}&from=${context.from}`
+    )).data;
+    commit("setAgastyaApiKeyGraphs", { team: context.team, agastyaApiKeyGraphs, field: context.field, range: context.range, id: context.id, from: context.from });
+    return agastyaApiKeyGraphs;
   },
   async editSubscription({ dispatch }, context) {
     const data = { ...context };
@@ -748,6 +772,8 @@ export const getters: GetterTree<RootState, RootState> = {
     state.agastyaApiKey[team] && state.agastyaApiKey[team][agastyaApiKey],
   agastyaApiKeyLogs: state => (team: string, agastyaApiKeyLogs: string) =>
     state.agastyaApiKeyLogs[team] && state.agastyaApiKeyLogs[team][agastyaApiKeyLogs],
+  agastyaApiKeyGraphs: state => (team: string, agastyaApiKeyLogs: string, field: string) =>
+    state.agastyaApiKeyLogs[team] && state.agastyaApiKeyLogs[team][agastyaApiKeyLogs] && state.agastyaApiKeyLogs[team][agastyaApiKeyLogs][field],
   apiKeyLogs: state => (team: string, apiKeyLogs: string) =>
     state.apiKeyLogs[team] && state.apiKeyLogs[team][apiKeyLogs],
   organization: state => (team: string) => (state.organizations)[team]

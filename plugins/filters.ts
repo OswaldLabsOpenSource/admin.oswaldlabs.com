@@ -8,7 +8,7 @@ Vue.filter("number", (value: number) =>
 );
 
 Vue.filter("shortText", (value: string) =>
-  (value || "").length > 20 ? `${(value || "").substring(0, 20)}...` : (value || "")
+  (typeof value === "string" ? value : "").length > 20 ? `${(typeof value === "string" ? value : "").substring(0, 20)}...` : (typeof value === "string" ? value : "")
 );
 
 function capitalizeFirstLetter(string) {
@@ -16,5 +16,5 @@ function capitalizeFirstLetter(string) {
 }
 
 Vue.filter("kebabSentence", (value: string) =>
-  capitalizeFirstLetter((value || "").replace(/-/g, " "))
+  capitalizeFirstLetter((typeof value === "string" ? value : "").replace(/-/g, " "))
 );

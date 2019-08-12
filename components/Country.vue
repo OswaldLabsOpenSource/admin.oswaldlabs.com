@@ -8,7 +8,7 @@
       :aria-label="text ? name : undefined"
       data-balloon-pos="up"
     ></div>
-    <div>{{ text || name }}</div>
+    <div class="name">{{ text || name }}</div>
   </div>
 </template>
 
@@ -35,6 +35,8 @@ export default class Country extends Vue {
 <style lang="scss" scoped>
 .country {
   display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   > * {
     display: inline-block;
   }
