@@ -115,9 +115,7 @@
       </div>
       <h2>Add Agastya to your site</h2>
       <p>
-        <a class="button" href="https://help.oswaldlabs.com/developers/installation.html" target="_blank"
-          >Read documentation<
-        /a>
+        <a class="button" href="https://help.oswaldlabs.com/developers/installation.html" target="_blank">Read documentation</a>
       </p>
       <h2>Create Agastya API key</h2>
       <p>
