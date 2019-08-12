@@ -20,6 +20,7 @@ Vue.filter("kebabSentence", (value: string) =>
 );
 
 Vue.filter("eventName", (value: string) => {
+  if (typeof value !== "string") value = "";
   value = capitalizeFirstLetter(value);
   value = (typeof value === "string" ? value : "").length > 20 ? `${(typeof value === "string" ? value : "").substring(0, 20)}...` : (typeof value === "string" ? value : "");
   value = value.replace(/-/g, " ");

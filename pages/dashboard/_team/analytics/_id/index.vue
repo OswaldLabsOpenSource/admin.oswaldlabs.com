@@ -442,6 +442,8 @@ export default class Dashboard extends Vue {
       })
       .then(data => {
         this.data = data;
+        if (!data || !data.data || !data.data.length)
+          throw new Error("no-data");
       })
       .then(() =>
         this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
@@ -497,18 +499,6 @@ export default class Dashboard extends Vue {
           id: this.$route.params.id,
           range: this.timeFilter,
           from: this.from,
-          field: "referrer_domain"
-        })
-      )
-      .then(aggregationReferrer => {
-        this.aggregationReferrer = aggregationReferrer;
-      })
-      .then(() =>
-        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
-          team: this.$route.params.team,
-          id: this.$route.params.id,
-          range: this.timeFilter,
-          from: this.from,
           field: "event"
         })
       )
@@ -550,6 +540,18 @@ export default class Dashboard extends Vue {
       )
       .then(aggregationDevice => {
         this.aggregationDevice = aggregationDevice;
+      })
+      .then(() =>
+        this.$store.dispatch("manage/getAgastyaApiKeyGraphs", {
+          team: this.$route.params.team,
+          id: this.$route.params.id,
+          range: this.timeFilter,
+          from: this.from,
+          field: "referrer_domain"
+        })
+      )
+      .then(aggregationReferrer => {
+        this.aggregationReferrer = aggregationReferrer;
       })
       .catch(error => {
         throw new Error(error);
