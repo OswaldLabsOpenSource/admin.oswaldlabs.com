@@ -51,10 +51,8 @@
     flex-grow: 1;
   }
   .column--type-shrink {
-    flex: none;
-  }
-  .column--type-stretch {
     justify-content: stretch;
+    flex: 0.1 0 0;
   }
 }
 

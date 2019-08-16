@@ -21,6 +21,7 @@ const countries = getAllCountries();
 export default class Country extends Vue {
   @Prop({ default: "" }) code;
   @Prop({ default: "" }) text;
+  @Prop({ default: true }) showText;
 
   get name() {
     return (

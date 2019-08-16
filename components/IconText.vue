@@ -4,8 +4,10 @@
       v-if="image"
       class="flag"
       :style="`background-image: url('${image}')`"
+      :aria-label="showText ? undefined : name"
+      data-balloon-pos="up"
     ></div>
-    <div>{{ name }}</div>
+    <div v-if="showText">{{ name }}</div>
   </div>
 </template>
 
@@ -17,6 +19,7 @@ import analyticsIcons from "analytics-icons";
 export default class Country extends Vue {
   @Prop({ default: "" }) text;
   @Prop({ default: "brand" }) type;
+  @Prop({ default: true }) showText;
 
   get image() {
     if (this.text === "" || this.text === "unknown") return;
