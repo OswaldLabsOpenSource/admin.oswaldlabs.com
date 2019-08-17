@@ -9,6 +9,9 @@
     <Users v-else-if="activeRoute === 'users'">
       <nuxt />
     </Users>
+    <Analytics v-else-if="activeRoute === 'analytics'">
+      <nuxt />
+    </Analytics>
     <Manage v-else-if="activeRoute === 'organization-settings'">
       <nuxt />
     </Manage>
@@ -24,6 +27,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import Admin from "@/components/Admin.vue";
 import Users from "@/components/Users.vue";
 import Settings from "@/components/Settings.vue";
+import Analytics from "@/components/Analytics.vue";
 import Manage from "@/components/Manage.vue";
 import Policies from "@/components/Policies.vue";
 
@@ -31,6 +35,7 @@ import Policies from "@/components/Policies.vue";
   components: {
     Users,
     Settings,
+    Analytics,
     Admin,
     Policies,
     Manage
@@ -50,6 +55,8 @@ export default class Layout extends Vue {
       this.activeRoute = "admin";
     } else if (this.$route.path.startsWith("/users")) {
       this.activeRoute = "users";
+    } else if (this.$route.path.includes("/analytics/")) {
+      this.activeRoute = "analytics";
     } else if (this.$route.path.startsWith("/policies")) {
       this.activeRoute = "policies";
     } else {

@@ -8,7 +8,7 @@
       :aria-label="text ? name : undefined"
       data-balloon-pos="up"
     ></div>
-    <div class="name" v-if="showText">{{ text || name }}</div>
+    <div v-if="showText" class="name">{{ text || name }}</div>
   </div>
 </template>
 
