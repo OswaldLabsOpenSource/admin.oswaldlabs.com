@@ -43,7 +43,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { mapGetters } from "vuex";
-import { Aggregation } from "@/types/manage";
+import { Aggregations } from "@/types/manage";
 import Loading from "@/components/Loading.vue";
 import Country from "@/components/Country.vue";
 import IconText from "@/components/IconText.vue";
@@ -58,7 +58,7 @@ import IconText from "@/components/IconText.vue";
 })
 export default class Dashboard extends Vue {
   loading = "";
-  data: Aggregation = [];
+  data: Aggregations[] = [];
   from = 0;
   titles = {
     user_fp: "Anonymous user ID"

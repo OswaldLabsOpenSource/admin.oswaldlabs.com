@@ -204,7 +204,8 @@ export default class Settings extends Vue {
   private created() {
     if (!this.$route.query.timeFilter)
       return this.$router.replace(this.$route.path + "?timeFilter=24h");
-    this.timeFilter = this.$route.query.timeFilter;
+    if (typeof this.$route.query.timeFilter === "string")
+      this.timeFilter = this.$route.query.timeFilter;
   }
 
   private updateTimeFilter() {
