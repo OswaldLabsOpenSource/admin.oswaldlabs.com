@@ -54,7 +54,7 @@
               <a class="item" href="https://help.oswaldlabs.com"
                 >Help Center</a
               >
-              <button class="item" onclick="window.agastya.open()">
+              <button class="item" onclick="(window as any).agastya.open()">
                 Accessibility
               </button>
             </div>
@@ -199,8 +199,8 @@ library.add(faBell, faQuestionCircle, faBars, faTimes);
 // const feedback = new Feeedback({
 //   onSubmit: result =>
 //     new Promise((resolve, reject) => {
-//       if (window.agastya && typeof window.agastya.secureTrack === "function")
-//         window.agastya.secureTrack({ feedback: result });
+//       if ((window as any).agastya && typeof (window as any).agastya.secureTrack === "function")
+//         (window as any).agastya.secureTrack({ feedback: result });
 //       resolve();
 //     })
 // });
@@ -297,9 +297,9 @@ export default class Card extends Vue {
   }
   private feedback() {
     if (process.client) {
-      if (!window || typeof window.agastya !== "object") return;
-      window.agastya.open();
-      window.agastya.navigate('/pages/form');
+      if (!window || typeof (window as any).agastya !== "object") return;
+      (window as any).agastya.open();
+      (window as any).agastya.navigate('/pages/form');
     }
     // feedback.open();
   }
