@@ -51,8 +51,8 @@
               class="dropdown"
             >
               <button class="item" @click="feedback">Feedback</button>
-              <nuxt-link class="item" to="/settings/account"
-                >Help Center</nuxt-link
+              <a class="item" href="https://help.oswaldlabs.com"
+                >Help Center</a
               >
               <button class="item" onclick="window.agastya.open()">
                 Accessibility
@@ -296,6 +296,11 @@ export default class Card extends Vue {
       });
   }
   private feedback() {
+    if (process.client) {
+      if (!window || typeof window.agastya !== "object") return;
+      window.agastya.open();
+      window.agastya.navigate('/pages/form');
+    }
     // feedback.open();
   }
   private load() {
