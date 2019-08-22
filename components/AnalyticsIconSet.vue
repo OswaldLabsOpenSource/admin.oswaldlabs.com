@@ -7,6 +7,11 @@
       :show-text="false"
     />
     <IconText
+      v-if="os || userAgent"
+      :text="getOsName(userAgent)"
+      :show-text="false"
+    />
+    <IconText
       v-if="manufacturer || userAgent"
       :text="getManufactererName(userAgent)"
       :show-text="false"
@@ -31,6 +36,7 @@ export default class AnalyticsIconSet extends Vue {
   @Prop() userAgent;
   @Prop() manufacturer;
   @Prop() browser;
+  @Prop() os;
 
   getBrowserName(userAgent) {
     if (this.browser) return this.browser;
@@ -41,6 +47,11 @@ export default class AnalyticsIconSet extends Vue {
     if (this.manufacturer) return this.manufacturer;
     const result = new WhichBrowser(userAgent);
     return result.device.manufacturer;
+  }
+  getOsName(userAgent) {
+    if (this.os) return this.os;
+    const result = new WhichBrowser(userAgent);
+    return result.os.name;
   }
 }
 </script>

@@ -160,7 +160,9 @@
         </div>
       </form>
       <div
-        :key="`an${$route.query.timeFilter}${$route.query.now}`"
+        :key="
+          `an${$route.query.timeFilter}${$route.query.now}${$route.query.filter}`
+        "
         class="card"
       >
         <slot />
@@ -211,7 +213,11 @@ export default class Settings extends Vue {
   private updateTimeFilter() {
     return this.$router.replace(
       this.$route.path +
-        `?timeFilter=${this.timeFilter}&now=${new Date().getTime()}`
+        `?timeFilter=${this.timeFilter}&now=${new Date().getTime()}${
+          typeof this.$route.query.filter === "string"
+            ? `&filter=${this.$route.query.filter}`
+            : ""
+        }`
     );
   }
 }

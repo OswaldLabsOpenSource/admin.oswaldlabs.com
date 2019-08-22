@@ -50,6 +50,7 @@
                         :country-code="log._source.country_code"
                         :user-agent="log._source.user_agent"
                         :browser="log._source.browser_name"
+                        :os="log._source.os_name"
                         :manufacturer="log._source.device_manufacturer"
                       />
                     </td>
@@ -62,6 +63,18 @@
                     </td>
                     <td v-else><em>No event</em></td>
                     <td>
+                      <router-link
+                        :to="
+                          `/dashboard/${$route.params.team}/analytics/${$route.params.id}?timeFilter=${$route.query.timeFilter}&filter=session_id%3A${log._source.session_id}`
+                        "
+                        class="button button--type-icon"
+                      >
+                        <font-awesome-icon
+                          class="icon"
+                          icon="eye"
+                          fixed-width
+                        />
+                      </router-link>
                       <button
                         aria-label="Download JSON"
                         data-balloon-pos="up"
@@ -260,6 +273,7 @@ export default class Dashboard extends Vue {
         team: this.$route.params.team,
         id: this.$route.params.id,
         range: this.$route.query.timeFilter,
+        filter: this.$route.query.filter,
         from: this.from
       })
       .then(data => {
@@ -284,6 +298,7 @@ export default class Dashboard extends Vue {
         team: this.$route.params.team,
         id: this.$route.params.id,
         range: this.$route.query.timeFilter,
+        filter: this.$route.query.filter,
         from: this.from
       })
       .then(() => {

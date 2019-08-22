@@ -51,9 +51,7 @@
               class="dropdown"
             >
               <button class="item" @click="feedback">Feedback</button>
-              <a class="item" href="https://help.oswaldlabs.com"
-                >Help Center</a
-              >
+              <a class="item" href="https://help.oswaldlabs.com">Help Center</a>
               <button class="item" onclick="(window as any).agastya.open()">
                 Accessibility
               </button>
@@ -299,7 +297,7 @@ export default class Card extends Vue {
     if (process.client) {
       if (!window || typeof (window as any).agastya !== "object") return;
       (window as any).agastya.open();
-      (window as any).agastya.navigate('/pages/form');
+      (window as any).agastya.navigate("/pages/form");
     }
     // feedback.open();
   }

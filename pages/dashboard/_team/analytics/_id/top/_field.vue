@@ -22,16 +22,60 @@
                     $route.params.field === 'device_manufacturer'
                 "
               >
-                <IconText :text="kv.key" />
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  <IconText :text="kv.key" />
+                </router-link>
               </td>
               <td v-else-if="$route.params.field === 'referrer_domain'">
-                <IconText :text="kv.key" type="domain" />
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  <IconText :text="kv.key" type="domain" />
+                </router-link>
               </td>
               <td v-else-if="$route.params.field === 'user_fp'">
-                <code>{{ kv.key }}</code>
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  <code>{{ kv.key }}</code>
+                </router-link>
               </td>
-              <td v-else>{{ kv.key | kebabSentence }}</td>
-              <td>{{ kv.doc_count }}</td>
+              <td v-else>
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  {{ kv.key | kebabSentence }}
+                </router-link>
+              </td>
+              <td>
+                {{ kv.doc_count }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -72,6 +116,10 @@ export default class Dashboard extends Vue {
 
   private mounted() {
     this.load();
+  }
+
+  private e(t: string) {
+    return encodeURIComponent(t);
   }
 
   private load() {

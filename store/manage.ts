@@ -442,7 +442,7 @@ export const actions: ActionTree<RootState, RootState> = {
   },
   async getAgastyaApiKeyLogs({ commit }, context) {
     const agastyaApiKeyLogs: any = (await this.$axios.get(
-      `/organizations/${context.team}/agastya-api-keys/${context.id}/logs?range=${context.range}&from=${context.from}`
+      `/organizations/${context.team}/agastya-api-keys/${context.id}/logs?range=${context.range}&from=${context.from}${context.filter ? `&filter=${encodeURIComponent(context.filter)}` : ""}`
     )).data;
     commit("setAgastyaApiKeyLogs", { team: context.team, agastyaApiKeyLogs, range: context.range, id: context.id, from: context.from });
     return agastyaApiKeyLogs;
