@@ -335,24 +335,25 @@ export default {
     },
     "dialogflow": {
       title: "Dialogflow",
+      noScript: true,
       description:
         "Add an AI-powered chatbot to your site using Dialogflow.",
       params: [
         {
-          model: "apiKey",
-          value: "",
-          label: "API key",
+          model: "lang",
+          value: "en",
+          label: "Language",
           message:
-            "Copy and paste the API key from your Dialogflow project",
+            "Enter the language code (ISO 639-2) of your Dialogflow project",
           type: "text",
           required: true
         },
         {
-          model: "lang",
-          value: "en",
-          label: "English",
+          model: "title",
+          value: "Chatbot",
+          label: "Title",
           message:
-            "Enter the language code (ISO 639-2) of your Dialogflow project",
+            "Enter a title for this chatbot, like Help or agent's name",
           type: "text",
           required: true
         }

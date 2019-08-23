@@ -157,13 +157,15 @@ export default class Blocks extends Vue {
     margin-right: 1rem;
     margin-bottom: 1rem;
     img {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 30%;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.2rem;
+      float: left;
+      margin-right: 1rem;
     }
     .item-title {
       font-weight: bold;
-      margin: 0.5rem 0;
+      margin: 0.5rem 0 1.5rem 0;
     }
     .item-text {
       font-size: 95%;

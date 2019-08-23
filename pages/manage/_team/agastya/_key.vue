@@ -215,6 +215,17 @@
             @input="val => updateValue('variables', 'readAloudLanguage', val)"
           />
         </div>
+        <h3>Dialogflow</h3>
+        <div v-if="agastyaApiKey.protectedInfo" class="row">
+          <Input
+            :value="agastyaApiKey.protectedInfo.dialogflowServiceAccount || ''"
+            label="Service account JSON"
+            @input="
+              val =>
+                updateValue('protectedInfo', 'dialogflowServiceAccount', val)
+            "
+          />
+        </div>
         <h3>Translation</h3>
         <div v-if="agastyaApiKey.variables" class="row">
           <CheckList
