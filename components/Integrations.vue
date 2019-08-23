@@ -22,7 +22,11 @@
             v-else
             :label="param.label"
             :value="
-              result[item.key] ? result[item.key][param.model] : param.value
+              result[item.key]
+                ? result[item.key][param.model]
+                  ? result[item.key][param.model]
+                  : param.value
+                : param.value
             "
             :help="param.message"
             :required="param.required"

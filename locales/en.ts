@@ -356,6 +356,15 @@ export default {
             "Enter a title for this chatbot, like Help or agent's name",
           type: "text",
           required: true
+        },
+        {
+          model: "firstMessage",
+          value: "Hi there, how are you?",
+          label: "Salutation message",
+          message:
+            "Enter the first message the chatbot will send, like Hello",
+          type: "text",
+          required: true
         }
       ]
     },
