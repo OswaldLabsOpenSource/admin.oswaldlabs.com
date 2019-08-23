@@ -332,6 +332,31 @@ export default {
           type: "boolean"
         }
       ]
-    }
+    },
+    "dialogflow": {
+      title: "Dialogflow",
+      description:
+        "Add an AI-powered chatbot to your site using Dialogflow.",
+      params: [
+        {
+          model: "apiKey",
+          value: "",
+          label: "API key",
+          message:
+            "Copy and paste the API key from your Dialogflow project",
+          type: "text",
+          required: true
+        },
+        {
+          model: "lang",
+          value: "en",
+          label: "English",
+          message:
+            "Enter the language code (ISO 639-2) of your Dialogflow project",
+          type: "text",
+          required: true
+        }
+      ]
+    },
   }
 };
