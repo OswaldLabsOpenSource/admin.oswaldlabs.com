@@ -102,6 +102,12 @@
                 @input="val => updateValue('variables', 'displayNone', val)"
               />
               <Checkbox
+                :value="agastyaApiKey.variables.hideOptions"
+                label="Hide user options from bottom of widget"
+                help="Customize, settings, help and feedback menu will be hidden"
+                @input="val => updateValue('variables', 'hideOptions', val)"
+              />
+              <Checkbox
                 :value="agastyaApiKey.variables.captioned"
                 label="Always show the Agastya label"
                 help="If you don't check this option, the label will appear on mouse over"
