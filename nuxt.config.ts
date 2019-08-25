@@ -67,6 +67,7 @@ const config: NuxtConfiguration = {
       }
     ]
   ],
+  buildModules: ["@nuxt/typescript-build"],
   axios: {
     baseURL:
       process.env.NODE_ENV === "production"
@@ -90,6 +91,10 @@ const config: NuxtConfiguration = {
         });
       }
     }
+  },
+  typescript: {
+    typeCheck: true,
+    ignoreNotFoundWarnings: true
   }
 };
 

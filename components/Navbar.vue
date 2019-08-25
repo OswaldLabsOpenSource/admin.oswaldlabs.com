@@ -27,6 +27,7 @@
           >Settings</nuxt-link
         >
         <nuxt-link v-else class="item" to="/settings">Settings</nuxt-link>
+        <nuxt-link class="item" to="/docs">Docs</nuxt-link>
         <span>
           <button
             class="item item--type-less"
@@ -262,6 +263,8 @@ export default class Card extends Vue {
   }
   private logout() {
     this.$store.dispatch("auth/logout");
+    this.isAuthenticated = false;
+    this.user = emptyUser;
     this.$router.push("/");
   }
   private mounted() {
