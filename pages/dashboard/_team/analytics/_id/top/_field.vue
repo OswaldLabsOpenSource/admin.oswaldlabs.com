@@ -13,10 +13,42 @@
           <tbody>
             <tr v-for="(kv, i) in data" :key="`kv${i}`">
               <td v-if="$route.params.field === 'country_code'">
-                <Country :code="kv.key" />
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  <Country :code="kv.key" />
+                </router-link>
               </td>
               <td
-                v-if="
+                v-else-if="
+                  $route.params.field === 'city' ||
+                    $route.params.field === 'region_name'
+                "
+              >
+                <router-link
+                  :to="
+                    `/dashboard/${$route.params.team}/analytics/${
+                      $route.params.id
+                    }?timeFilter=${$route.query.timeFilter}&filter=${
+                      $route.params.field
+                    }%3A${e(kv.key)}`
+                  "
+                >
+                  <span v-if="kv.key.includes(':')">
+                    <Country :show-text="false" :code="kv.key.split(':')[0]" />
+                    <span>{{ kv.key.split(":")[1] }}</span>
+                  </span>
+                  <span v-else>{{ kv.key }}</span>
+                </router-link>
+              </td>
+              <td
+                v-else-if="
                   $route.params.field === 'browser_name' ||
                     $route.params.field === 'os_name' ||
                     $route.params.field === 'device_manufacturer'
