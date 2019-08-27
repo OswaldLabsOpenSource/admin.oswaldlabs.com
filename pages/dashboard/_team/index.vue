@@ -16,7 +16,7 @@
           <div>Analytics</div>
         </router-link>
         <router-link
-          :to="`/dashboard/${$route.params.team}/audit-webpages`"
+          :to="`/manage/${$route.params.team}/agastya`"
           class="card card--type-padded text text--align-center"
         >
           <font-awesome-icon
@@ -24,7 +24,7 @@
             icon="history"
             fixed-width
           />
-          <div>Audits</div>
+          <div>Agastya</div>
         </router-link>
         <a
           href="https://help.oswaldlabs.com"
