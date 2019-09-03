@@ -109,8 +109,7 @@
       </div>
       <h2>Create audit</h2>
       <p>
-        You can use audits to programmatically access Oswald Labs Platform in
-        your applications.
+        You can use audits to find accessibility issues in your website.
       </p>
       <form @submit.prevent="createAuditWebpage">
         <Input

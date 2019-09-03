@@ -63,6 +63,18 @@
                     </td>
                     <td v-else><em>No event</em></td>
                     <td>
+                      <!-- <button
+                        aria-label="Expand"
+                        data-balloon-pos="up"
+                        class="button button--type-icon"
+                        @click="() => downloadJson(log)"
+                      >
+                        <font-awesome-icon
+                          class="icon"
+                          icon="chevron-down"
+                          fixed-width
+                        />
+                      </button> -->
                       <router-link
                         :to="
                           `/dashboard/${$route.params.team}/analytics/${$route.params.id}?timeFilter=${$route.query.timeFilter}&filter=session_id%3A${log._source.session_id}`
@@ -131,7 +143,9 @@ import {
   faEye,
   faArrowDown,
   faSync,
-  faCloudDownloadAlt
+  faCloudDownloadAlt,
+  faChevronDown,
+  faChevronUp
 } from "@fortawesome/free-solid-svg-icons";
 import {
   emptyPagination,
@@ -147,7 +161,14 @@ import HTTPStatus from "@/components/HTTPStatus.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
 import AnalyticsIconSet from "@/components/AnalyticsIconSet.vue";
 import Loading from "@/components/Loading.vue";
-library.add(faEye, faArrowDown, faSync, faCloudDownloadAlt);
+library.add(
+  faEye,
+  faArrowDown,
+  faSync,
+  faCloudDownloadAlt,
+  faChevronDown,
+  faChevronUp
+);
 
 function sharedStart(array: string[]) {
   const A = array.concat().sort();

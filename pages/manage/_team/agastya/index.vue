@@ -22,9 +22,9 @@
               !agastyaApiKeys.data ||
               !agastyaApiKeys.data.length)
         "
-        heading="No Agastya API keys yet"
+        heading="No Agastya widgets yet"
         img="undraw_software_engineer_lvl5.svg"
-        text="Create an Agastya API key below"
+        text="Create an Agastya widget below"
       />
       <div
         v-else-if="
@@ -35,7 +35,7 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Agastya API key</th>
+              <th>Agastya widget</th>
               <th>Plan</th>
               <th></th>
             </tr>
@@ -98,7 +98,7 @@
             :disabled="loadingMore"
             @click="loadMore"
           >
-            <span>Load more Agastya API key</span>
+            <span>Load more Agastya widget</span>
             <font-awesome-icon
               v-if="!loadingMore"
               class="icon"
@@ -122,10 +122,10 @@
           >Read documentation</a
         >
       </p>
-      <h2>Create Agastya API key</h2>
+      <h2>Create Agastya widget</h2>
       <p>
-        You can use Agastya API key to programmatically access Oswald Labs
-        Platform in your applications.
+        You can use the Agastya widget to add accessibility features to your
+        websites.
       </p>
       <form @submit.prevent="createAgastyaApiKey">
         <Input
@@ -135,21 +135,21 @@
           required
           @input="val => (newAgastyaApiKeyName = val)"
         />
-        <button class="button">Create Agastya API key</button>
+        <button class="button">Create Agastya widget</button>
       </form>
     </div>
     <transition name="modal">
       <Confirm v-if="showDelete" :on-close="() => (showDelete = null)">
-        <h2>Are you sure you want to delete this Agastya API key?</h2>
+        <h2>Are you sure you want to delete this Agastya widget?</h2>
         <p>
-          Deleting an Agastya API key is not reversible, and Agastya will stop
+          Deleting an Agastya widget is not reversible, and Agastya will stop
           working on your website immediately.
         </p>
         <button
           class="button button--color-danger button--state-cta"
           @click="deleteAgastyaApiKey(showDelete.id)"
         >
-          Yes, delete Agastya API key
+          Yes, delete Agastya widget
         </button>
         <button type="button" class="button" @click="showDelete = null">
           No, don't delete
@@ -218,7 +218,7 @@ export default class ManageSettings extends Vue {
   }
 
   private load() {
-    this.loading = "Loading your Agastya API keys";
+    this.loading = "Loading your Agastya widgets";
     this.$store
       .dispatch("manage/getAgastyaApiKeys", { team: this.$route.params.team })
       .then(agastyaApiKeys => {
@@ -256,7 +256,7 @@ export default class ManageSettings extends Vue {
   }
 
   private createAgastyaApiKey() {
-    this.loading = "Creating your Agastya API key";
+    this.loading = "Creating your Agastya widget";
     this.$store
       .dispatch("manage/createAgastyaApiKey", {
         team: this.$route.params.team,
@@ -276,7 +276,7 @@ export default class ManageSettings extends Vue {
 
   private deleteAgastyaApiKey(key: string) {
     this.showDelete = null;
-    this.loading = "Deleting your Agastya API key";
+    this.loading = "Deleting your Agastya widget";
     this.$store
       .dispatch("manage/deleteAgastyaApiKey", {
         team: this.$route.params.team,
