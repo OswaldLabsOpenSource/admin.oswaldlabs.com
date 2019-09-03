@@ -84,8 +84,8 @@
                     </td>
                     <td v-if="log._source">
                       <AnalyticsIconSet
-                        :country-code="log._source.ipCountry"
                         :user-agent="log._source.userAgent"
+                        :country-code="log._source.ipCountry"
                       />
                     </td>
                     <td v-else><em>No UA</em></td>
@@ -164,10 +164,11 @@ import {
 import { emptyPagination, ServerLogs } from "@/types/admin";
 import Select from "@/components/form/Select.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
+import IconText from "@/components/IconText.vue";
 import HTTPStatus from "@/components/HTTPStatus.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
-import AnalyticsIconSet from "@/components/AnalyticsIconSet.vue";
 import Loading from "@/components/Loading.vue";
+import AnalyticsIconSet from "@/components/AnalyticsIconSet.vue";
 library.add(faEye, faArrowDown, faSync, faCloudDownloadAlt);
 
 @Component({
@@ -178,6 +179,7 @@ library.add(faEye, faArrowDown, faSync, faCloudDownloadAlt);
     Select,
     TimeAgo,
     HTTPStatus,
+    IconText,
     AnalyticsIconSet,
     FontAwesomeIcon
   }
