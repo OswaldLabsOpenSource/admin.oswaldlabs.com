@@ -1,6 +1,6 @@
 import { Paginated } from "./root";
 import { User } from "./users";
-import { Organization } from "./manage";
+import { Organization, AgastyaApiKey } from "./manage";
 
 export interface ElasticSearchRecord {
   _index: string;
@@ -19,17 +19,21 @@ export interface Users extends Paginated {
 export interface Organizations extends Paginated {
   data: Organization[];
 }
+export interface AgastyaApiKeys extends Paginated {
+  data: AgastyaApiKey[];
+}
 export interface ServerLogs extends Paginated {
   data: ElasticSearchRecord[];
 }
 
 export interface RootState {
   users: Users,
+  agastyaApiKeys: AgastyaApiKeys,
   organizations: Organizations,
   serverLogs: ServerLogs
 }
 
 export const emptyPagination = {
-  data: [],
+  data: [] as any[],
   hasMore: false
 };

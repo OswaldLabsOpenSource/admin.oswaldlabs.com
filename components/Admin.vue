@@ -10,6 +10,14 @@
           <font-awesome-icon class="nav-icon" icon="building" fixed-width />
           <span>Teams</span>
         </nuxt-link>
+        <nuxt-link class="item" :to="`/admin/agastya-api-keys`">
+          <font-awesome-icon
+            class="nav-icon"
+            icon="universal-access"
+            fixed-width
+          />
+          <span>Agastya API keys</span>
+        </nuxt-link>
         <nuxt-link class="item" :to="`/admin/server-logs`">
           <font-awesome-icon class="nav-icon" icon="code" fixed-width />
           <span>Server logs</span>
@@ -27,8 +35,13 @@ import { Component, Vue } from "vue-property-decorator";
 import { mapGetters } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUsers, faBuilding, faCode } from "@fortawesome/free-solid-svg-icons";
-library.add(faUsers, faBuilding, faCode);
+import {
+  faUsers,
+  faBuilding,
+  faCode,
+  faUniversalAccess
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faUsers, faBuilding, faCode, faUniversalAccess);
 
 @Component({
   components: {

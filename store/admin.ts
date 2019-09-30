@@ -5,8 +5,9 @@ import { RootState, emptyPagination } from "~/types/admin";
 export const state = (): RootState => ({
   users: emptyPagination,
   organizations: emptyPagination,
-  serverLogs: emptyPagination
-});
+  serverLogs: emptyPagination,
+  agastyaApiKeys: emptyPagination
+}); 
 
 export const mutations: MutationTree<RootState> = {
   setUsers(state: RootState, { users, start, next, hasMore }): void {
@@ -22,6 +23,20 @@ export const mutations: MutationTree<RootState> = {
     currentUsers.hasMore = hasMore;
     currentUsers.next = next;
     Vue.set(state, "users", currentUsers);
+  },
+  setAgastyaApiKeys(state: RootState, { agastyaApiKeys, start, next, hasMore }): void {
+    const currentAgastyaApiKeys = { ...state.agastyaApiKeys } || emptyPagination;
+    if (start) {
+      currentAgastyaApiKeys.data = [
+        ...currentAgastyaApiKeys.data,
+        ...agastyaApiKeys.data
+      ];
+    } else {
+      currentAgastyaApiKeys.data = agastyaApiKeys.data;
+    }
+    currentAgastyaApiKeys.hasMore = hasMore;
+    currentAgastyaApiKeys.next = next;
+    Vue.set(state, "agastyaApiKeys", currentAgastyaApiKeys);
   },
   setOrganizations(state: RootState, { organizations, start, next, hasMore }): void {
     const currentOrganizations = { ...state.organizations } || emptyPagination;
@@ -64,6 +79,18 @@ export const actions: ActionTree<RootState, RootState> = {
     });
     return users;
   },
+  async getAgastyaApiKeys({ commit }, { start = 0 }) {
+    const agastyaApiKeys: any = (await this.$axios.get(
+      `/admin/agastya-api-keys?start=${start}&itemsPerPage=20`
+    )).data;
+    commit("setAgastyaApiKeys", {
+      agastyaApiKeys,
+      start,
+      next: agastyaApiKeys.next,
+      hasMore: agastyaApiKeys.hasMore
+    });
+    return agastyaApiKeys;
+  },
   async getOrganizations({ commit }, { start = 0 }) {
     const organizations: any = (await this.$axios.get(
       `/admin/organizations?start=${start}&itemsPerPage=20`
@@ -89,6 +116,7 @@ export const actions: ActionTree<RootState, RootState> = {
 
 export const getters: GetterTree<RootState, RootState> = {
   users: state => () => state.users,
+  agastyaApiKeys: state => () => state.agastyaApiKeys,
   organizations: state => () => state.organizations,
   serverLogs: state => () => state.serverLogs
 };
