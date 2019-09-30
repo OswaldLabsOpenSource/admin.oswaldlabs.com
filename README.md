@@ -28,5 +28,5 @@ yarn generate
 
 ## 📄 License
 
-- Code: [MIT](https://github.com/o15y/staart-ui/blob/master/LICENSE)
+- Code: [MIT](https://github.com/o15y/staart-native/blob/master/LICENSE)
 - Logo and assets: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
