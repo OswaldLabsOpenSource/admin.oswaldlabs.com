@@ -68,7 +68,8 @@ const config: Configuration = {
       {
         id: "UA-79176349-10"
       }
-    ]
+    ],
+    "~/modules/ts-fix.ts"
   ],
   buildModules: ["@nuxt/typescript-build"],
   axios: {
