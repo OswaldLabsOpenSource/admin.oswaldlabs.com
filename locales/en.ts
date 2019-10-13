@@ -240,26 +240,26 @@ export default {
     goToDashboard: "Go to your dashboard →"
   },
   agastyaModes: {
-    "dyslexia": "Dyslexia",
+    dyslexia: "Dyslexia",
     "blue-light-filter": "Blue filter",
-    "night": "Night mode",
+    night: "Night mode",
     "large-font": "Large font",
     "legible-fonts": "Legible fonts",
     "keyboard-navigation": "Keyboard nav",
     "highlight-links": "Highlight Links",
     "big-cursor": "Big cursor",
-    "desaturate": "Desaturate",
+    desaturate: "Desaturate",
     "reading-mode": "Reading mode",
     "read-aloud": "Read aloud",
-    "contrast": "Contrast",
-    "translate": "Translate",
+    contrast: "Contrast",
+    translate: "Translate",
     "line-height": "Line height",
     "word-spacing": "Word spacing",
     "letter-spacing": "Letter spacing",
     "font-size": "Font size",
     "font-family": "Reading font",
     "color-scheme": "Color scheme",
-    "landmark-color": "Landmark color",
+    "landmark-color": "Landmark color"
   },
   integrations: {
     "eu-cookie-law": {
@@ -290,7 +290,8 @@ export default {
           model: "trackPageviews",
           value: "",
           label: "Track pageviews",
-          message: "Don't check this if you already have GA on your website, we'll only track Agastya events",
+          message:
+            "Don't check this if you already have GA on your website, we'll only track Agastya events",
           type: "boolean"
         }
       ]
@@ -304,7 +305,8 @@ export default {
           model: "dsn",
           value: "https://example@sentry.io/example",
           label: "DSN",
-          message: "Copy and paste the DNS from your Sentry project client keys",
+          message:
+            "Copy and paste the DNS from your Sentry project client keys",
           type: "text",
           required: true
         }
@@ -341,11 +343,10 @@ export default {
         }
       ]
     },
-    "dialogflow": {
+    dialogflow: {
       title: "Dialogflow",
       noScript: true,
-      description:
-        "Add an AI-powered chatbot to your site using Dialogflow.",
+      description: "Add an AI-powered chatbot to your site using Dialogflow.",
       params: [
         {
           model: "lang",
@@ -360,8 +361,7 @@ export default {
           model: "title",
           value: "Chatbot",
           label: "Title",
-          message:
-            "Enter a title for this chatbot, like Help or agent's name",
+          message: "Enter a title for this chatbot, like Help or agent's name",
           type: "text",
           required: true
         },
@@ -369,12 +369,11 @@ export default {
           model: "firstMessage",
           value: "Hi there, how are you?",
           label: "Salutation message",
-          message:
-            "Enter the first message the chatbot will send, like Hello",
+          message: "Enter the first message the chatbot will send, like Hello",
           type: "text",
           required: true
         }
       ]
-    },
+    }
   }
 };

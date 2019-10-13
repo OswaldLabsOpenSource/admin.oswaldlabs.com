@@ -17,7 +17,11 @@ const config: Configuration = {
       }
     ],
     link: [
-      { rel: "icon", type: "image/png", href: "https://oswaldlabs.com/images/pwa/favicon-32x32.png" },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "https://oswaldlabs.com/images/pwa/favicon-32x32.png"
+      },
       {
         rel: "stylesheet",
         href:

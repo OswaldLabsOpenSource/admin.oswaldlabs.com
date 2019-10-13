@@ -39,7 +39,7 @@ export interface Audit extends IdRow {
 export type ApiKeyLogs = any;
 export type AgastyaApiKeyLogs = any;
 export type AgastyaApiKeyGraphs = {
-  [index: string]: any
+  [index: string]: any;
 };
 export interface Domain extends Row {
   domain: string;
@@ -201,7 +201,7 @@ export interface SingleAuditWebpageKV {
 export interface SingleAuditKV {
   [index: string]: {
     [index: string]: AuditsKV;
-  }
+  };
 }
 
 export interface SingleApiKeyLogsKV {

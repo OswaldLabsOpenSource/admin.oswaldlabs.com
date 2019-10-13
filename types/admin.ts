@@ -27,10 +27,10 @@ export interface ServerLogs extends Paginated {
 }
 
 export interface RootState {
-  users: Users,
-  agastyaApiKeys: AgastyaApiKeys,
-  organizations: Organizations,
-  serverLogs: ServerLogs
+  users: Users;
+  agastyaApiKeys: AgastyaApiKeys;
+  organizations: Organizations;
+  serverLogs: ServerLogs;
 }
 
 export const emptyPagination = {

@@ -7,16 +7,13 @@ export const state = (): RootState => ({
   organizations: emptyPagination,
   serverLogs: emptyPagination,
   agastyaApiKeys: emptyPagination
-}); 
+});
 
 export const mutations: MutationTree<RootState> = {
   setUsers(state: RootState, { users, start, next, hasMore }): void {
     const currentUsers = { ...state.users } || emptyPagination;
     if (start) {
-      currentUsers.data = [
-        ...currentUsers.data,
-        ...users.data
-      ];
+      currentUsers.data = [...currentUsers.data, ...users.data];
     } else {
       currentUsers.data = users.data;
     }
@@ -24,8 +21,12 @@ export const mutations: MutationTree<RootState> = {
     currentUsers.next = next;
     Vue.set(state, "users", currentUsers);
   },
-  setAgastyaApiKeys(state: RootState, { agastyaApiKeys, start, next, hasMore }): void {
-    const currentAgastyaApiKeys = { ...state.agastyaApiKeys } || emptyPagination;
+  setAgastyaApiKeys(
+    state: RootState,
+    { agastyaApiKeys, start, next, hasMore }
+  ): void {
+    const currentAgastyaApiKeys =
+      { ...state.agastyaApiKeys } || emptyPagination;
     if (start) {
       currentAgastyaApiKeys.data = [
         ...currentAgastyaApiKeys.data,
@@ -38,7 +39,10 @@ export const mutations: MutationTree<RootState> = {
     currentAgastyaApiKeys.next = next;
     Vue.set(state, "agastyaApiKeys", currentAgastyaApiKeys);
   },
-  setOrganizations(state: RootState, { organizations, start, next, hasMore }): void {
+  setOrganizations(
+    state: RootState,
+    { organizations, start, next, hasMore }
+  ): void {
     const currentOrganizations = { ...state.organizations } || emptyPagination;
     if (start) {
       currentOrganizations.data = [
@@ -55,15 +59,12 @@ export const mutations: MutationTree<RootState> = {
   setServerLogs(state: RootState, { serverLogs, from }): void {
     let currentServerLogs = { ...state.serverLogs } || emptyPagination;
     if (from) {
-      currentServerLogs.data = [
-        ...currentServerLogs.data,
-        ...serverLogs.data
-      ];
+      currentServerLogs.data = [...currentServerLogs.data, ...serverLogs.data];
     } else {
       currentServerLogs = { ...serverLogs };
     }
     Vue.set(state, "serverLogs", currentServerLogs);
-  },
+  }
 };
 
 export const actions: ActionTree<RootState, RootState> = {
@@ -108,7 +109,9 @@ export const actions: ActionTree<RootState, RootState> = {
       `/admin/server-logs?range=${range}&from=${from}`
     )).data;
     commit("setServerLogs", {
-      serverLogs, range, from
+      serverLogs,
+      range,
+      from
     });
     return serverLogs;
   }
