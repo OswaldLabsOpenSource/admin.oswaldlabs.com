@@ -82,6 +82,9 @@ const config: Configuration = {
         ? "https://platform-beta.oswaldlabs.com/v1"
         : "http://localhost:7002/v1"
   },
+  sitemap: {
+    hostname: "https://admin.oswaldlabs.com"
+  },
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
