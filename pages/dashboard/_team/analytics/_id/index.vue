@@ -14,95 +14,98 @@
               v-else-if="data && data.data && data.data.length"
               :class="{ loading }"
             >
-              <div class="row text text--mb-2">
-                <div v-if="data.count">
-                  <div class="text text--size-250">
-                    {{ data.count | number }}
+              <UserJourney v-if="isSession" :data="data.data" />
+              <div v-else>
+                <div class="row text text--mb-2">
+                  <div v-if="data.count">
+                    <div class="text text--size-250">
+                      {{ data.count | number }}
+                    </div>
+                    <div>total events</div>
                   </div>
-                  <div>total events</div>
                 </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>User info</th>
+                      <th>Action</th>
+                      <th>Event</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(log, i) in data.data" :key="`l${log._id}${i}`">
+                      <td v-if="log._source && log._source.date">
+                        <TimeAgo :date="log._source.date" />
+                      </td>
+                      <!-- <td class="less-pad">
+                        <input
+                          v-if="log._source && log._source.url"
+                          class="input input--font-monospace input--padding-condensed"
+                          :value="log._source.url"
+                          disabled
+                        />
+                      </td> -->
+                      <td v-if="log._source && log._source.country_code">
+                        <AnalyticsIconSet
+                          :country-code="log._source.country_code"
+                          :user-agent="log._source.user_agent"
+                          :browser="log._source.browser_name"
+                          :os="log._source.os_name"
+                          :manufacturer="log._source.device_manufacturer"
+                        />
+                      </td>
+                      <td v-if="log._source && log._source.action">
+                        {{ log._source.action | kebabSentence | shortText }}
+                      </td>
+                      <td v-else><em>No action</em></td>
+                      <td v-if="log._source && log._source.event">
+                        {{ log._source.event | eventName }}
+                      </td>
+                      <td v-else><em>No event</em></td>
+                      <td>
+                        <!-- <button
+                          aria-label="Expand"
+                          data-balloon-pos="up"
+                          class="button button--type-icon"
+                          @click="() => downloadJson(log)"
+                        >
+                          <font-awesome-icon
+                            class="icon"
+                            icon="chevron-down"
+                            fixed-width
+                          />
+                        </button> -->
+                        <router-link
+                          :to="
+                            `/dashboard/${$route.params.team}/analytics/${$route.params.id}?timeFilter=${$route.query.timeFilter}&filter=session_id%3A${log._source.session_id}`
+                          "
+                          class="button button--type-icon"
+                        >
+                          <font-awesome-icon
+                            class="icon"
+                            icon="eye"
+                            fixed-width
+                          />
+                        </router-link>
+                        <button
+                          aria-label="Download JSON"
+                          data-balloon-pos="up"
+                          class="button button--type-icon"
+                          @click="() => downloadJson(log)"
+                        >
+                          <font-awesome-icon
+                            class="icon"
+                            icon="cloud-download-alt"
+                            fixed-width
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>User info</th>
-                    <th>Action</th>
-                    <th>Event</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(log, i) in data.data" :key="`l${log._id}${i}`">
-                    <td v-if="log._source && log._source.date">
-                      <TimeAgo :date="log._source.date" />
-                    </td>
-                    <!-- <td class="less-pad">
-                      <input
-                        v-if="log._source && log._source.url"
-                        class="input input--font-monospace input--padding-condensed"
-                        :value="log._source.url"
-                        disabled
-                      />
-                    </td> -->
-                    <td v-if="log._source && log._source.country_code">
-                      <AnalyticsIconSet
-                        :country-code="log._source.country_code"
-                        :user-agent="log._source.user_agent"
-                        :browser="log._source.browser_name"
-                        :os="log._source.os_name"
-                        :manufacturer="log._source.device_manufacturer"
-                      />
-                    </td>
-                    <td v-if="log._source && log._source.action">
-                      {{ log._source.action | kebabSentence | shortText }}
-                    </td>
-                    <td v-else><em>No action</em></td>
-                    <td v-if="log._source && log._source.event">
-                      {{ log._source.event | eventName }}
-                    </td>
-                    <td v-else><em>No event</em></td>
-                    <td>
-                      <!-- <button
-                        aria-label="Expand"
-                        data-balloon-pos="up"
-                        class="button button--type-icon"
-                        @click="() => downloadJson(log)"
-                      >
-                        <font-awesome-icon
-                          class="icon"
-                          icon="chevron-down"
-                          fixed-width
-                        />
-                      </button> -->
-                      <router-link
-                        :to="
-                          `/dashboard/${$route.params.team}/analytics/${$route.params.id}?timeFilter=${$route.query.timeFilter}&filter=session_id%3A${log._source.session_id}`
-                        "
-                        class="button button--type-icon"
-                      >
-                        <font-awesome-icon
-                          class="icon"
-                          icon="eye"
-                          fixed-width
-                        />
-                      </router-link>
-                      <button
-                        aria-label="Download JSON"
-                        data-balloon-pos="up"
-                        class="button button--type-icon"
-                        @click="() => downloadJson(log)"
-                      >
-                        <font-awesome-icon
-                          class="icon"
-                          icon="cloud-download-alt"
-                          fixed-width
-                        />
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
               <div class="pagination text text--align-center">
                 <button
                   v-if="data && data.hasMore"
@@ -156,6 +159,7 @@ import {
 import Select from "@/components/form/Select.vue";
 import TimeAgo from "@/components/TimeAgo.vue";
 import Country from "@/components/Country.vue";
+import UserJourney from "@/components/UserJourney.vue";
 import IconText from "@/components/IconText.vue";
 import HTTPStatus from "@/components/HTTPStatus.vue";
 import LargeMessage from "@/components/LargeMessage.vue";
@@ -186,6 +190,7 @@ function sharedStart(array: string[]) {
     Loading,
     LargeMessage,
     Select,
+    UserJourney,
     TimeAgo,
     HTTPStatus,
     IconText,
@@ -341,6 +346,14 @@ export default class Dashboard extends Vue {
       JSON.stringify(log._source, null, 2),
       `log-${log._id}.json`,
       "application/json"
+    );
+  }
+
+  get isSession() {
+    return (
+      this.$route.query &&
+      typeof this.$route.query.filter === "string" &&
+      this.$route.query.filter.includes("session_id")
     );
   }
 }
