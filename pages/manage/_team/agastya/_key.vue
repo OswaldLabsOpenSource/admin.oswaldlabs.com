@@ -113,6 +113,48 @@
                 help="If you don't check this option, the label will appear on mouse over"
                 @input="val => updateValue('variables', 'captioned', val)"
               />
+              <div>
+                <span
+                  class="fake-button"
+                  :style="`background: ${agastyaApiKey.backgroundColor}`"
+                >
+                  <svg
+                    v-if="agastyaApiKey.variables.icon === 'help'"
+                    viewBox="0 0 92 92"
+                    preserveAspectRatio="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M46 0a46 46 0 110 92 46 46 0 010-92zm-1.5 62c-2.5 0-4.7 1-6.5 2.7a8.4 8.4 0 00-2.6 6.3c0 2.5.9 4.6 2.6 6.4 1.8 1.8 4 2.6 6.5 2.6 1.6 0 3-.4 4.4-1.2a9.7 9.7 0 003.3-3.2 8.5 8.5 0 00-1.5-10.9 8.8 8.8 0 00-6.2-2.6zm1-50c-4.2 0-8 .6-11.5 2a18.5 18.5 0 00-8.4 6.5c-2.1 3-3.2 6.8-3.2 11.6h16.5a6 6 0 013.3-5.5 6.4 6.4 0 016.2-.1c.8.4 1.5 1 2 1.8s.8 1.8.8 2.9c0 1.2-.3 2.3-1 3.2-.6 1-1.5 1.8-2.6 2.7L44 39.7c-1.5 1-2.9 2.2-4 3.5-1 1.3-2 3-2.5 5-.5 2.2-.8 5-.8 8.6v1.5h15.2v-1.5c0-1.8.3-3.2.8-4.4A9.7 9.7 0 0155 49c1-1 2.4-1.9 4-2.8 2-1.2 3.9-2.6 5.5-4a16.5 16.5 0 005-12c0-4.2-1-7.6-3-10.3-2.2-2.7-5-4.7-8.7-6-3.6-1.4-7.7-2-12.3-2z"
+                      :fill="agastyaApiKey.foregroundColor"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                  <svg
+                    v-else-if="agastyaApiKey.variables.icon === 'chat'"
+                    viewBox="0 0 92 92"
+                    preserveAspectRatio="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M68 5H24C14 5 5 13 5 23v26c0 10 9 18 19 18h14l27 20V67h3c10 0 19-8 19-18V23c0-10-9-18-19-18zM29 40a5 5 0 110-10 5 5 0 010 10zm17 0a5 5 0 110-10 5 5 0 010 10zm17 0a5 5 0 110-10 5 5 0 010 10z"
+                      :fill="agastyaApiKey.foregroundColor"
+                      fill-rule="nonzero"
+                    />
+                  </svg>
+                  <svg
+                    v-else
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      :fill="agastyaApiKey.foregroundColor"
+                      d="M49.86 0a49.86 49.86 0 1 0 0 99.72 49.86 49.86 0 0 0 0-99.72zm-.75 9.9a6.46 6.46 0 1 1 .01 12.91 6.46 6.46 0 0 1-.01-12.9zm27.94 20.83l-19.18 2.42v19.2l9.3 31.03a3.62 3.62 0 0 1-2.63 4.4 3.57 3.57 0 0 1-4.4-2.54L50.62 57h-2.94l-8.76 28.83a3.6 3.6 0 0 1-4.7 2.01c-1.86-.73-3-2.84-2.27-4.72L40 52.67V33.15l-17.67-2.4a3.2 3.2 0 0 1-2.9-3.56 3.34 3.34 0 0 1 3.6-3.04L44.5 26h9.41l22.87-1.89a3.28 3.28 0 0 1 3.42 3.18 3.3 3.3 0 0 1-3.15 3.44z"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
             <div>
               <Input
@@ -917,5 +959,17 @@ export default class ManageSettings extends Vue {
 <style lang="scss" scoped>
 .heading-text {
   font-size: 125%;
+}
+.fake-button {
+  display: inline-block;
+  background-color: #333;
+  height: 3.41rem;
+  width: 3.41rem;
+  border-radius: 100%;
+  svg {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0.33rem;
+  }
 }
 </style>
