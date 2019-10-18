@@ -208,16 +208,29 @@
           @input="val => (agastyaApiKey.integrations = val)"
         />
         <h2>Advanced</h2>
-        <h3>Custom CSS</h3>
-        <KeyValueList
-          label="CSS rules"
-          :value="agastyaApiKey.customCss"
-          :key-options="agastyaCustomCssKeys"
-          key-label="Accessibility mode"
-          value-label="CSS code"
-          :code="true"
-          @input="val => (agastyaApiKey.customCss = val)"
-        />
+        <div class="row">
+          <div>
+            <h3>Custom CSS</h3>
+            <KeyValueList
+              label="CSS rules"
+              :value="agastyaApiKey.customCss"
+              :key-options="agastyaCustomCssKeys"
+              key-label="Accessibility mode"
+              value-label="CSS code"
+              :code="true"
+              @input="val => (agastyaApiKey.customCss = val)"
+            />
+          </div>
+          <div v-if="agastyaApiKey.variables">
+            <Input
+              type="text"
+              :value="agastyaApiKey.variables.initialPage || '/'"
+              label="Initial page"
+              help="Initial Agastya page to open"
+              @input="val => updateValue('variables', 'initialPage', val)"
+            />
+          </div>
+        </div>
         <h3>Links</h3>
         <div v-if="agastyaApiKey.variables" class="row">
           <div>
