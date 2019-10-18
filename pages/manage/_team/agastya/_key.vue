@@ -127,6 +127,16 @@
                 placeholder="e.g., your website name"
                 @input="val => updateValue('variables', 'subheadingText', val)"
               />
+              <Select
+                :value="agastyaApiKey.variables.icon || 'accessibility'"
+                label="Icon"
+                :options="{
+                  accessibility: 'Accessibility',
+                  help: 'Help (question mark)',
+                  chat: 'Chat'
+                }"
+                @input="val => updateValue('variables', 'icon', val)"
+              />
             </div>
           </div>
         </div>

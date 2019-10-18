@@ -143,7 +143,9 @@
               }}</span>
               <em v-else>{{ item._source.description }}</em>
             </q>
-            <span v-else-if="item._source.event === 'pageview'"> on {{ item._source.url }}</span>
+            <span v-else-if="item._source.event === 'pageview'">
+              on {{ item._source.url }}</span
+            >
             <span v-else>{{ item._source.description }}</span>
           </div>
         </li>
