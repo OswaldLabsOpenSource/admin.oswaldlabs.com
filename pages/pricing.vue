@@ -371,6 +371,11 @@ export default class Pricing extends Vue {
     },
     Developers: {
       "Developer API": [true, true, true],
+      "Event tracking": [
+        "5,000 events/month",
+        "10,000 events/month",
+        "Unlimited"
+      ],
       "IFTTT integrations": [true, true, true],
       "99.99% uptime SLA": [false, true, true],
       "Increased rate limit": [false, false, true],
