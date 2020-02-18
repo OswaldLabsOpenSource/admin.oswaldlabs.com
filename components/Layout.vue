@@ -46,6 +46,7 @@ export default class Layout extends Vue {
   private created() {
     this.updateLayout();
   }
+
   private updateLayout() {
     if (this.$route.path.startsWith("/settings")) {
       this.activeRoute = "user-settings";
@@ -63,6 +64,7 @@ export default class Layout extends Vue {
       this.activeRoute = "default";
     }
   }
+
   @Watch("$route")
   onRouteChanged() {
     this.updateLayout();

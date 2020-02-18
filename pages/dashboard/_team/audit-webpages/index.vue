@@ -85,9 +85,9 @@ import { mapGetters } from "vuex";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEye, faArrowDown, faSync } from "@fortawesome/free-solid-svg-icons";
-import { emptyPagination, AuditWebpages } from "../../../../types/manage";
 import LargeMessage from "@/components/LargeMessage.vue";
 import Loading from "@/components/Loading.vue";
+import { emptyPagination, AuditWebpages } from "../../../../types/manage";
 library.add(faEye, faArrowDown, faSync);
 
 @Component({
@@ -112,6 +112,7 @@ export default class Dashboard extends Vue {
   private mounted() {
     this.load();
   }
+
   private load() {
     this.loading = "Loading your audits";
     this.$store

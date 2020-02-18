@@ -221,6 +221,7 @@ export default class ManageSettings extends Vue {
     exp_year: new Date().getUTCFullYear() + 5,
     name: ""
   };
+
   months = months;
   years: number[] = [];
 

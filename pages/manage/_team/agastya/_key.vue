@@ -545,6 +545,7 @@ export default class ManageSettings extends Vue {
     2: "Weekly",
     3: "Monthly"
   };
+
   agastyaApiKey: AgastyaApiKey | null = null;
   agastyaCustomCssKeys = agastyaCustomCssKeys;
   integrations = integrations;
@@ -655,6 +656,7 @@ export default class ManageSettings extends Vue {
       slug: "share"
     }
   ];
+
   readAloudLanguages = {
     xx: "Infer from webpage",
     "en-US": "English (US)",
@@ -687,6 +689,7 @@ export default class ManageSettings extends Vue {
     tr: "Turkish",
     cy: "Welsh"
   };
+
   translateLanguages = {
     af: { text: "Afrikaans" },
     sq: { text: "Albanian" },
@@ -793,6 +796,7 @@ export default class ManageSettings extends Vue {
     yo: { text: "Yoruba" },
     zu: { text: "Zulu" }
   };
+
   private created() {
     this.agastyaApiKey = {
       ...this.$store.getters["manage/agastyaApiKey"](
@@ -840,6 +844,7 @@ export default class ManageSettings extends Vue {
       this.agastyaApiKey = { ...agastyaApiKey };
     }
   }
+
   private cancelSubscription() {
     if (!this.agastyaApiKey || !this.agastyaApiKey.subscriptionId) return;
     this.loading = "Canceling your subscription";

@@ -134,6 +134,7 @@ export default class ManageSettings extends Vue {
     2: "Weekly",
     3: "Monthly"
   };
+
   auditWebpage: AuditWebpage | null = null;
 
   private created() {

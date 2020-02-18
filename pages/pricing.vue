@@ -335,11 +335,13 @@ export default class Pricing extends Vue {
       inr: 1000000
     }
   };
+
   currencySymbols = {
     usd: "$",
     eur: "€",
     inr: "₹"
   };
+
   moreFeatures = {
     Team: {
       "Team members": [
@@ -383,12 +385,15 @@ export default class Pricing extends Vue {
       "Reseller accounts": [false, false, true]
     }
   };
+
   private changeCurrency(currency: string) {
     this.selectedCurrency = currency;
   }
+
   get calculatedPrice() {
     return this.proPrices[this.selectedTerm][this.selectedCurrency];
   }
+
   get currencySymbol() {
     return this.currencySymbols[this.selectedCurrency];
   }

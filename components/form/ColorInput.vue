@@ -65,6 +65,7 @@ export default class Input extends Vue {
     }
   })
   colors;
+
   @Prop() value;
   @Prop() label;
   @Prop() required;

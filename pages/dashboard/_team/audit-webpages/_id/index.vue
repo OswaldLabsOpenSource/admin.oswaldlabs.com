@@ -177,6 +177,7 @@ export default class Dashboard extends Vue {
   private mounted() {
     this.load();
   }
+
   private load() {
     this.loading = "Loading your audits";
     this.$store
