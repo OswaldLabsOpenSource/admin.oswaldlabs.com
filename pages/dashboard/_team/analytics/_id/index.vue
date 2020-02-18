@@ -17,9 +17,9 @@
               <UserJourney v-if="isSession" :data="data.data" />
               <div v-else>
                 <div class="row text text--mb-2">
-                  <div v-if="data.count">
+                  <div v-if="data && data.count && data.count.value">
                     <div class="text text--size-250">
-                      {{ data.count | number }}
+                      {{ data.count.value | number }}
                     </div>
                     <div>total events</div>
                   </div>

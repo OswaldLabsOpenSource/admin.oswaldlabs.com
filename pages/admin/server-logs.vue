@@ -24,11 +24,11 @@
           <form @submit.prevent="load">
             <div class="row">
               <div
-                v-if="data && data.count"
+                v-if="data && data.count && data.count.value"
                 class="column column--type-shrink text text--mr-2"
               >
                 <div class="text text--size-250">
-                  {{ data.count | number }}
+                  {{ data.count.value | number }}
                 </div>
                 <div>requests</div>
               </div>
