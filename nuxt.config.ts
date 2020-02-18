@@ -80,7 +80,7 @@ const config: Configuration = {
     baseURL:
       process.env.NODE_ENV === "production"
         ? "https://platform-beta.oswaldlabs.com/v1"
-        : "http://localhost:7002/v1"
+        : "http://localhost/v1"
   },
   sitemap: {
     hostname: "https://admin.oswaldlabs.com"
