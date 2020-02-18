@@ -189,9 +189,7 @@ export default class ManageSettings extends Vue {
     const countries = {};
     const allCountries = getAllCountries();
     for (const country in allCountries) {
-      if (allCountries.hasOwnProperty(country)) {
-        countries[country.toUpperCase()] = allCountries[country].name;
-      }
+      countries[country.toUpperCase()] = allCountries[country].name;
     }
     this.countries = countries;
   }

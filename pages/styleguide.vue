@@ -420,13 +420,11 @@ library.add(
 const countries = {};
 const allCountries = getAllCountries();
 for (const country in allCountries) {
-  if (allCountries.hasOwnProperty(country)) {
-    const cc = country.toLowerCase();
-    countries[cc] = {
-      value: allCountries[country].name
-      // img: `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/${cc}.svg`
-    };
-  }
+  const cc = country.toLowerCase();
+  countries[cc] = {
+    value: allCountries[country].name
+    // img: `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/${cc}.svg`
+  };
 }
 
 @Component({
