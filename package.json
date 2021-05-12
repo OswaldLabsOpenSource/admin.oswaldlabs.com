@@ -32,7 +32,7 @@
     "@nuxtjs/google-analytics": "^2.2.3",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "analytics-icons": "^5.5.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "copy-to-clipboard": "^3.2.1",
     "countries-and-timezones": "^2.0.5",
     "date-fns": "^2.9.0",
