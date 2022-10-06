@@ -44,7 +44,7 @@
     "jwt-decode": "^2.2.0",
     "meta-ctrl-enter": "^1.0.2",
     "nuxt": "^2.11.0",
-    "snyk": "^1.294.0",
+    "snyk": "^1.996.0",
     "ua-parser-js": "^0.7.21",
     "vue-chartjs": "^3.5.0",
     "vue-focus-lock": "^1.4.0",
